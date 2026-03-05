@@ -398,6 +398,23 @@
     .footer-r { text-align:right; }
     .footer-sys { font-family:'JetBrains Mono',monospace; font-size:.62rem; letter-spacing:.1em; color:var(--gray); margin-bottom:.25rem; }
     .footer-tag { font-size:.75rem; color:rgba(136,136,170,0.45); }
+    .footer-contact {
+      margin-top: 0.4rem;
+      font-family:'JetBrains Mono',monospace;
+      font-size:.62rem;
+      letter-spacing:.08em;
+      color:rgba(136,136,170,0.78);
+    }
+    .footer-contact a {
+      color:inherit;
+      text-decoration:none;
+      border-bottom:1px solid transparent;
+      transition: color .25s, border-color .25s;
+    }
+    .footer-contact a:hover {
+      color:var(--cyan);
+      border-color:var(--border-c);
+    }
 
     /* ── KEYFRAMES ── */
     @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
@@ -590,6 +607,7 @@
       .footer-r { text-align:left; }
       .footer-sys { font-size: 0.66rem; line-height: 1.45; }
       .footer-tag { font-size: 0.82rem; line-height: 1.4; }
+      .footer-contact { font-size: 0.74rem; line-height: 1.35; }
     }
 
     @media (max-width:420px) {
@@ -610,6 +628,7 @@
       .metric { padding: 1.75rem 0.9rem; }
       .step { padding: 0.95rem; }
       .m-tag { font-size: 0.64rem; }
+      .footer-contact { font-size: 0.7rem; }
     }
   </style>
 </head>
@@ -863,7 +882,6 @@
     </p>
     <div class="m-tags reveal d2">
       <span class="m-tag" data-i18n="mtag1">AI-FIRST</span>
-      <span class="m-tag" data-i18n="mtag2">SOBERANO</span>
       <span class="m-tag" data-i18n="mtag3">ANTIFRÁGIL</span>
       <span class="m-tag" data-i18n="mtag4">ORIENTADO A DADOS</span>
       <span class="m-tag" data-i18n="mtag5">RETORNOS ASSIMÉTRICOS</span>
@@ -879,6 +897,7 @@
     <div class="footer-r">
       <div class="footer-sys mono" data-i18n="f_sys">SYS:CAPITAL_COGNITIVO_v1.0 · GLOBAL</div>
       <div class="footer-tag"      data-i18n="f_tag">Organização AI-First · Operações Autônomas</div>
+      <div class="footer-contact mono" data-i18n-html="f_contact">Contato: <a href="tel:+5551998591966">+55 51 99859-1966</a></div>
     </div>
   </div>
 </footer>
@@ -928,8 +947,9 @@ const I18N = {
     m3_v:'5 Camadas',    m3_l:'Arquitetura de governança<br>zero overhead fixo',
     m4_l:'Escala sem aumento proporcional<br>de esforço humano',
     man_q:'Não buscamos clientes.<br>Nós os <span class="hl">encontramos</span> com precisão,<br>com evidência, <span class="hl">em escala global</span>.',
-    mtag1:'AI-FIRST', mtag2:'SOBERANO', mtag3:'ANTIFRÁGIL', mtag4:'ORIENTADO A DADOS', mtag5:'RETORNOS ASSIMÉTRICOS', mtag6:'ZERO RUÍDO',
+    mtag1:'AI-FIRST', mtag2:'ADAPTIVO', mtag3:'ANTIFRÁGIL', mtag4:'ORIENTADO A DADOS', mtag5:'RETORNOS ASSIMÉTRICOS', mtag6:'ZERO RUÍDO',
     f_sys:'SYS:CAPITAL_COGNITIVO_v1.0 · GLOBAL', f_tag:'Organização AI-First · Operações Autônomas',
+    f_contact:'Contato: <a href="tel:+5551998591966">+55 51 99859-1966</a>',
   },
   en: {
     nav_system:'System', nav_arch:'Architecture', nav_cycle:'Cycle', nav_metrics:'Metrics',
@@ -973,8 +993,9 @@ const I18N = {
     m3_v:'5-Layer',     m3_l:'Governance architecture<br>zero fixed overhead',
     m4_l:'Scale without proportional<br>increase in human effort',
     man_q:'We don\'t search for clients.<br>We <span class="hl">find them</span> with precision,<br>with evidence, <span class="hl">at global scale</span>.',
-    mtag1:'AI-FIRST', mtag2:'SOVEREIGN', mtag3:'ANTIFRAGILE', mtag4:'DATA-DRIVEN', mtag5:'ASYMMETRIC RETURNS', mtag6:'ZERO NOISE',
+    mtag1:'AI-FIRST', mtag2:'ADAPTIVE', mtag3:'ANTIFRAGILE', mtag4:'DATA-DRIVEN', mtag5:'ASYMMETRIC RETURNS', mtag6:'ZERO NOISE',
     f_sys:'SYS:COGNITIVE_CAPITAL_v1.0 · GLOBAL', f_tag:'AI-First Organization · Autonomous Operations',
+    f_contact:'Contact: <a href="tel:+5551998591966">+55 51 99859-1966</a>',
   },
   es: {
     nav_system:'Sistema', nav_arch:'Arquitectura', nav_cycle:'Ciclo', nav_metrics:'Métricas',
@@ -1018,8 +1039,9 @@ const I18N = {
     m3_v:'5 Capas',    m3_l:'Arquitectura de gobernanza<br>cero overhead fijo',
     m4_l:'Escala sin aumento proporcional<br>del esfuerzo humano',
     man_q:'No buscamos clientes.<br>Los <span class="hl">encontramos</span> con precisión,<br>con evidencia, <span class="hl">a escala global</span>.',
-    mtag1:'AI-FIRST', mtag2:'SOBERANO', mtag3:'ANTIFRÁGIL', mtag4:'BASADO EN DATOS', mtag5:'RETORNOS ASIMÉTRICOS', mtag6:'CERO RUIDO',
+    mtag1:'AI-FIRST', mtag2:'ADAPTATIVO', mtag3:'ANTIFRÁGIL', mtag4:'BASADO EN DATOS', mtag5:'RETORNOS ASIMÉTRICOS', mtag6:'CERO RUIDO',
     f_sys:'SYS:CAPITAL_COGNITIVO_v1.0 · GLOBAL', f_tag:'Organización AI-First · Operaciones Autónomas',
+    f_contact:'Contacto: <a href="tel:+5551998591966">+55 51 99859-1966</a>',
   }
 };
 
