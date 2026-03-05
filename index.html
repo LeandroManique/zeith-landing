@@ -417,186 +417,199 @@
 
     @media (max-width:768px) {
       nav {
-        padding: 0.9rem 1rem;
+        padding: 0.95rem 1rem;
         gap: 0.8rem;
       }
       nav .nav-links { display:none; }
-      .nav-logo { font-size: 0.98rem; letter-spacing: 0.09em; }
-      .nav-right { gap: 0.65rem; margin-left: auto; }
+      .nav-logo { font-size: 1.04rem; letter-spacing: 0.085em; }
+      .nav-right { gap: 0.7rem; margin-left: auto; }
       .nav-pill { display: none; }
       .lang-switch {
         border: 1px solid var(--border);
         border-radius: 999px;
         background: rgba(255,255,255,0.03);
-        padding: 0.08rem;
+        padding: 0.12rem;
       }
       .lang-btn {
-        font-size: 0.65rem;
-        letter-spacing: 0.08em;
-        padding: 0.35rem 0.5rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        padding: 0.42rem 0.6rem;
       }
 
       #hero {
-        min-height: 100svh;
+        min-height: auto;
         height: auto;
-        padding: 6.5rem 0 4.25rem;
+        justify-content: flex-start;
+        padding: 6rem 0 2.2rem;
       }
       .hero-content {
-        width: min(100%, 28rem);
-        padding: 0 1.2rem;
+        width: min(100%, 34rem);
+        padding: 0 1rem;
       }
       .hero-status {
         width: 100%;
         justify-content: flex-start;
         text-align: left;
-        margin-bottom: 1.5rem;
-        font-size: 0.58rem;
-        letter-spacing: 0.12em;
+        margin-bottom: 1.1rem;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
       }
       .hero-title {
         width: 100%;
         text-align: left;
-        font-size: clamp(2.6rem, 18vw, 4.2rem);
-        margin-bottom: 1rem;
-        line-height: 0.95;
+        font-size: clamp(3rem, 17vw, 4.4rem);
+        margin-bottom: 0.85rem;
+        line-height: 0.92;
       }
       .hero-sub {
         max-width: none;
         text-align: left;
-        font-size: 0.98rem;
-        line-height: 1.7;
-        margin-bottom: 1.6rem;
+        font-size: 1.08rem;
+        line-height: 1.62;
+        margin-bottom: 1.2rem;
+        color: #c6cae0;
       }
-      .hero-pills { justify-content: flex-start; gap: 0.55rem; }
+      .hero-pills {
+        justify-content: flex-start;
+        gap: 0.6rem;
+        width: 100%;
+      }
       .hero-pill {
-        font-size: 0.58rem;
-        letter-spacing: 0.08em;
-        padding: 0.38rem 0.72rem;
+        width: 100%;
+        justify-content: flex-start;
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        padding: 0.56rem 0.9rem;
       }
       .hero-scroll { display: none; }
 
-      .s-inner { padding: 5.25rem 1.15rem; }
+      .s-inner { padding: 3.95rem 1rem; }
       .s-label {
-        font-size: 0.58rem;
-        letter-spacing: 0.14em;
-        margin-bottom: 0.8rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        margin-bottom: 0.7rem;
         gap: 0.5rem;
       }
       .s-label::before { width: 12px; }
       .s-title {
-        font-size: clamp(1.65rem, 8vw, 2.2rem);
-        line-height: 1.15;
-        margin-bottom: 1rem;
+        font-size: clamp(1.85rem, 8vw, 2.45rem);
+        line-height: 1.16;
+        margin-bottom: 0.85rem;
       }
       .s-desc {
-        font-size: 0.96rem;
-        line-height: 1.7;
+        font-size: 1.03rem;
+        line-height: 1.66;
         max-width: 100%;
       }
 
-      .concept-grid { margin-top: 2.25rem; gap: 0.85rem; }
-      .c-card { padding: 1.25rem; border-radius: 14px; }
-      .c-num { margin-bottom: 0.8rem; font-size: 0.56rem; letter-spacing: 0.12em; }
+      .concept-grid { margin-top: 1.75rem; gap: 1rem; }
+      .c-card { padding: 1.35rem; border-radius: 14px; }
+      .c-num { margin-bottom: 0.8rem; font-size: 0.66rem; letter-spacing: 0.08em; }
       .c-icon { width: 40px; height: 40px; font-size: 1rem; margin-bottom: 0.9rem; }
-      .c-title { font-size: 1rem; margin-bottom: 0.55rem; }
-      .c-body { font-size: 0.88rem; line-height: 1.6; }
+      .c-title { font-size: 1.1rem; margin-bottom: 0.55rem; }
+      .c-body { font-size: 0.95rem; line-height: 1.6; }
 
-      .a-layers { margin-top: 2.4rem; gap: 0.9rem; }
+      .a-layers { margin-top: 1.9rem; gap: 0.85rem; }
       .a-layer { grid-template-columns:1fr; border-radius:14px; }
       .a-left {
         border-right:none;
         border-bottom:1px solid var(--border);
-        padding: 1rem;
+        padding: 1.05rem;
       }
       .a-right {
-        padding: 1rem;
+        padding: 1.05rem;
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.85rem;
+        gap: 0.8rem;
       }
-      .a-role-t { font-size: 0.92rem; line-height: 1.35; }
-      .a-role-d { font-size: 0.86rem; line-height: 1.6; }
-      .badge { font-size: 0.56rem; letter-spacing: 0.08em; }
+      .a-role-t { font-size: 1rem; line-height: 1.35; }
+      .a-role-d { font-size: 0.93rem; line-height: 1.58; }
+      .badge { font-size: 0.64rem; letter-spacing: 0.07em; padding: 0.34rem 0.75rem; }
 
-      .cycle-steps { grid-template-columns:1fr; gap:1rem; margin-top:2.5rem; }
+      .cycle-steps { grid-template-columns:1fr; gap:0.85rem; margin-top:1.9rem; }
       .cycle-steps::before { display:none; }
       .step {
         align-items: flex-start;
         text-align: left;
-        padding: 1rem;
+        padding: 1.1rem;
         border: 1px solid var(--border);
         border-radius: 12px;
         background: rgba(255,255,255,0.02);
       }
       .step-dot {
-        width: 52px;
-        height: 52px;
-        margin-bottom: 0.85rem;
-        font-size: 0.9rem;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 0.7rem;
+        font-size: 0.88rem;
       }
-      .step-n { margin-bottom: 0.35rem; }
-      .step-t { font-size: 0.98rem; margin-bottom: 0.4rem; }
-      .step-d { font-size: 0.88rem; line-height: 1.62; }
+      .step-n { margin-bottom: 0.28rem; font-size: 0.66rem; }
+      .step-t { font-size: 1.05rem; margin-bottom: 0.34rem; }
+      .step-d { font-size: 0.94rem; line-height: 1.62; }
 
       .ticker-wrap { padding: 0.7rem 0; }
-      .ticker-item { font-size: 0.6rem; letter-spacing: 0.1em; padding: 0 1.2rem; }
+      .ticker-item { font-size: 0.7rem; letter-spacing: 0.08em; padding: 0 1.2rem; }
 
       .metrics-grid { grid-template-columns:1fr; }
       .metric {
         border-right:none;
         border-bottom:1px solid var(--border);
-        padding: 2.4rem 1.2rem;
+        padding: 2.05rem 1rem;
       }
       .metric:last-child { border-bottom:none; }
       .metric-v {
-        font-size: clamp(1.9rem, 10vw, 2.4rem);
+        font-size: clamp(2.15rem, 11vw, 2.7rem);
         margin-bottom: 0.5rem;
       }
-      .metric-l { font-size: 0.84rem; line-height: 1.6; }
+      .metric-l { font-size: 0.95rem; line-height: 1.55; }
 
       #manifesto::before { width: 560px; height: 560px; }
       .manifesto-inner {
-        padding: 5.5rem 1.2rem;
+        padding: 4.1rem 1rem;
         text-align: left;
       }
       .manifesto-q {
-        font-size: clamp(1.45rem, 8.2vw, 2rem);
-        line-height: 1.4;
-        margin-bottom: 1.7rem;
+        font-size: clamp(1.62rem, 8.8vw, 2.15rem);
+        line-height: 1.36;
+        margin-bottom: 1.35rem;
       }
       .m-tags { justify-content: flex-start; gap: 0.55rem; }
       .m-tag {
-        font-size: 0.62rem;
-        letter-spacing: 0.08em;
-        padding: 0.38rem 0.75rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.07em;
+        padding: 0.43rem 0.8rem;
       }
 
-      footer { padding: 1.6rem 1.2rem; }
+      footer { padding: 1.45rem 1rem; }
       .footer-in {
         flex-direction:column;
         align-items:flex-start;
-        gap:1rem;
+        gap:0.85rem;
         text-align:left;
       }
-      .footer-logo { font-size: 1rem; }
+      .footer-logo { font-size: 1.05rem; }
       .footer-r { text-align:left; }
-      .footer-sys { font-size: 0.58rem; line-height: 1.5; }
-      .footer-tag { font-size: 0.72rem; line-height: 1.45; }
+      .footer-sys { font-size: 0.66rem; line-height: 1.45; }
+      .footer-tag { font-size: 0.82rem; line-height: 1.4; }
     }
 
     @media (max-width:420px) {
-      nav { padding: 0.75rem 0.8rem; }
-      .nav-logo { font-size: 0.9rem; letter-spacing: 0.08em; }
-      .lang-btn { font-size: 0.6rem; padding: 0.32rem 0.4rem; }
+      nav { padding: 0.82rem 0.85rem; }
+      .nav-logo { font-size: 0.95rem; letter-spacing: 0.075em; }
+      .lang-btn { font-size: 0.66rem; padding: 0.38rem 0.48rem; }
 
-      .hero-content { padding: 0 0.85rem; }
-      .hero-title { font-size: clamp(2.2rem, 16vw, 3rem); }
-      .hero-sub { font-size: 0.93rem; }
-      .hero-pill { width: 100%; justify-content: flex-start; font-size: 0.56rem; }
+      #hero { padding: 5.75rem 0 1.8rem; }
+      .hero-content { padding: 0 0.9rem; }
+      .hero-status { font-size: 0.66rem; margin-bottom: 0.9rem; }
+      .hero-title { font-size: clamp(2.6rem, 16.5vw, 3.45rem); }
+      .hero-sub { font-size: 1rem; }
+      .hero-pill { font-size: 0.68rem; padding: 0.5rem 0.82rem; }
 
-      .s-inner { padding: 4.7rem 0.85rem; }
-      .metric { padding: 2rem 0.9rem; }
-      .step { padding: 0.85rem; }
+      .s-inner { padding: 3.5rem 0.85rem; }
+      .s-title { font-size: clamp(1.72rem, 9.2vw, 2.12rem); }
+      .s-desc { font-size: 0.99rem; }
+      .metric { padding: 1.75rem 0.9rem; }
+      .step { padding: 0.95rem; }
+      .m-tag { font-size: 0.64rem; }
     }
   </style>
 </head>
@@ -650,9 +663,9 @@
 
     <div class="hero-pills">
       <div class="hero-pill"><span class="pill-icon">◈</span> <span data-i18n="pill_studio">Venture Studio</span></div>
-      <div class="hero-pill"><span class="pill-icon">◈</span> <span data-i18n="pill_quant">Hedge Quantitativo</span></div>
+      <div class="hero-pill"><span class="pill-icon">◈</span> <span data-i18n="pill_quant">Quantitative Hedge</span></div>
       <div class="hero-pill"><span class="pill-icon">◈</span> <span data-i18n="pill_lab">Deep Tech Lab</span></div>
-      <div class="hero-pill"><span class="pill-icon">◆</span> <span data-i18n="pill_auto">95% Autônomo</span></div>
+      <div class="hero-pill"><span class="pill-icon">◆</span> <span data-i18n="pill_auto">95% Autonomous</span></div>
     </div>
   </div>
 
@@ -877,7 +890,7 @@ const I18N = {
     nav_system:'Sistema', nav_arch:'Arquitetura', nav_cycle:'Ciclo', nav_metrics:'Métricas',
     hero_status:'Sistema Online · Capital Cognitivo v1.0',
     hero_sub:'Uma organização <em>AI-first</em> que opera como um sistema cognitivo para descoberta, validação e <em>alocação assimétrica de capital</em>.',
-    pill_studio:'Venture Studio', pill_quant:'Hedge Quantitativo', pill_lab:'Deep Tech Lab', pill_auto:'95% Autônomo',
+    pill_studio:'Estúdio de Ventures', pill_quant:'Hedge Quantitativo', pill_lab:'Laboratório Deep Tech', pill_auto:'95% Autônomo',
     scroll_lbl:'Explorar',
     s1_lbl:'01 · O Sistema',
     s1_ttl:'Não é uma empresa.<br>É uma arquitetura cognitiva.',
@@ -967,7 +980,7 @@ const I18N = {
     nav_system:'Sistema', nav_arch:'Arquitectura', nav_cycle:'Ciclo', nav_metrics:'Métricas',
     hero_status:'Sistema en Línea · Capital Cognitivo v1.0',
     hero_sub:'Una organización <em>AI-first</em> que opera como un sistema cognitivo para el descubrimiento, validación y <em>asignación asimétrica de capital</em>.',
-    pill_studio:'Venture Studio', pill_quant:'Hedge Cuantitativo', pill_lab:'Deep Tech Lab', pill_auto:'95% Autónomo',
+    pill_studio:'Estudio de Ventures', pill_quant:'Hedge Cuantitativo', pill_lab:'Laboratorio Deep Tech', pill_auto:'95% Autónomo',
     scroll_lbl:'Explorar',
     s1_lbl:'01 · El Sistema',
     s1_ttl:'No es una empresa.<br>Es una arquitectura cognitiva.',
