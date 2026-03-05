@@ -87,7 +87,11 @@
     }
     .nav-logo span { color: var(--cyan); }
 
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+    }
     .nav-links a {
       color: var(--gray); text-decoration: none;
       font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em;
@@ -245,7 +249,7 @@
       position: absolute; bottom: 2.5rem; left: 50%;
       transform: translateX(-50%);
       display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
-      opacity: 0; animation: fadeUp 0.7s ease 1.2s forwards;
+      opacity: 0; animation: fadeUpCenter 0.7s ease 1.2s forwards;
       cursor: pointer;
     }
     .hero-scroll span {
@@ -426,6 +430,10 @@
 
     /* ── KEYFRAMES ── */
     @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeUpCenter {
+      from { opacity: 0; transform: translate(-50%, 28px); }
+      to   { opacity: 1; transform: translate(-50%, 0); }
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width:1024px) {
