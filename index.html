@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zeith Co · Cognitive Capital System</title>
+  <meta name="description" content="AI-first organization structured as a cognitive system for discovery, validation, and dynamic resource allocation." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:         #05050F;
+      --bg2:        #07071A;
+      --bg3:        #030308;
+      --surface:    rgba(13, 13, 30, 0.75);
+      --surface-s:  #0D0D1E;
+      --cyan:       #00C8FF;
+      --cyan-dim:   rgba(0, 200, 255, 0.12);
+      --cyan-glow:  rgba(0, 200, 255, 0.35);
+      --violet:     #8B5CF6;
+      --violet-dim: rgba(139, 92, 246, 0.12);
+      --white:      #EFEFFF;
+      --gray:       #8888AA;
+      --border:     rgba(255, 255, 255, 0.07);
+      --border-c:   rgba(0, 200, 255, 0.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', system-ui, sans-serif;
+      letter-spacing: -0.025em;
+    }
+
+    .mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* ── SCANLINE ── */
+    .scanline {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,200,255,0.012) 2px, rgba(0,200,255,0.012) 4px
+      );
+    }
+
+    /* ── CURSOR GLOW ── */
+    #cursor-glow {
+      position: fixed; width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,200,255,0.04) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: left 0.08s, top 0.08s;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1.25rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(5,5,15,0.88);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-color: var(--border);
+    }
+    .nav-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem; font-weight: 700; letter-spacing: 0.12em;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-logo span { color: var(--cyan); }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      color: var(--gray); text-decoration: none;
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+
+    .nav-right { display: flex; align-items: center; gap: 1.5rem; }
+
+    /* ── LANG SWITCHER ── */
+    .lang-switch { display: flex; align-items: center; gap: 0; }
+    .lang-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gray); background: none; border: none;
+      cursor: pointer; padding: 0.25rem 0.45rem;
+      transition: color 0.25s;
+    }
+    .lang-btn:hover { color: var(--white); }
+    .lang-btn.active { color: var(--cyan); }
+    .lang-sep {
+      color: rgba(255,255,255,0.15);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.55rem; pointer-events: none;
+    }
+
+    .nav-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.12em; color: var(--cyan);
+      border: 1px solid var(--border-c);
+      padding: 0.3rem 0.85rem; border-radius: 100px;
+      background: var(--cyan-dim);
+    }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; height: 100vh; min-height: 680px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    #neural { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    .hero-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.025) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 10%, transparent 100%);
+    }
+    .hero-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 40% at 50% 5%, rgba(0,200,255,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 85% 95%, rgba(139,92,246,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 10% 60%, rgba(0,200,255,0.04) 0%, transparent 60%);
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 0 1.5rem;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .hero-status {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.18em; color: var(--gray);
+      text-transform: uppercase; margin-bottom: 2.5rem;
+      opacity: 0; animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: #22c55e;
+      box-shadow: 0 0 8px rgba(34,197,94,0.7);
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity:1; box-shadow:0 0 8px rgba(34,197,94,0.7); }
+      50%      { opacity:0.5; box-shadow:0 0 16px rgba(34,197,94,0.4); }
+    }
+
+    /* ── GLITCH TITLE ── */
+    .hero-title {
+      font-size: clamp(4.5rem, 13vw, 10rem);
+      font-weight: 700; line-height: 0.9; letter-spacing: -0.04em;
+      margin-bottom: 1.75rem;
+      opacity: 0; animation: fadeUp 0.8s ease 0.4s forwards;
+    }
+    .glitch-wrap { position: relative; display: inline-block; }
+    .glitch { position: relative; color: var(--white); display: inline-block; }
+    .glitch .dot { color: var(--cyan); }
+    .glitch::before, .glitch::after {
+      content: attr(data-text);
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; pointer-events: none;
+    }
+    .glitch::before {
+      color: var(--cyan); left: 2px;
+      clip-path: polygon(0 18%, 100% 18%, 100% 36%, 0 36%);
+      animation: g1 5s infinite;
+    }
+    .glitch::after {
+      color: var(--violet); left: -2px;
+      clip-path: polygon(0 62%, 100% 62%, 100% 78%, 0 78%);
+      animation: g2 5s infinite;
+    }
+    @keyframes g1 {
+      0%,82%,100% { opacity:0; transform:translate(0); }
+      83% { opacity:1; transform:translate(-3px,1px); }
+      84% { opacity:1; transform:translate(3px,-1px); }
+      85% { opacity:0; }
+      90% { opacity:1; transform:translate(2px,0); }
+      91% { opacity:0; }
+    }
+    @keyframes g2 {
+      0%,86%,100% { opacity:0; transform:translate(0); }
+      87% { opacity:1; transform:translate(3px,2px); }
+      88% { opacity:1; transform:translate(-2px,-1px); }
+      89% { opacity:0; }
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 300; color: var(--gray); line-height: 1.65;
+      max-width: 560px; margin-bottom: 2.75rem;
+      opacity: 0; animation: fadeUp 0.8s ease 0.65s forwards;
+    }
+    .hero-sub em { font-style: normal; color: var(--white); font-weight: 500; }
+
+    .hero-pills {
+      display: flex; flex-wrap: wrap; gap: 0.75rem;
+      justify-content: center;
+      opacity: 0; animation: fadeUp 0.8s ease 0.85s forwards;
+    }
+    .hero-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.12em;
+      color: var(--gray); border: 1px solid var(--border);
+      padding: 0.4rem 1rem; border-radius: 100px;
+      background: rgba(255,255,255,0.03);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .pill-icon { color: var(--cyan); font-size: 0.75rem; }
+
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+      opacity: 0; animation: fadeUp 0.7s ease 1.2s forwards;
+      cursor: pointer;
+    }
+    .hero-scroll span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.18em; color: var(--gray); text-transform: uppercase;
+    }
+    .scroll-bar {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, var(--cyan), transparent);
+      animation: scroll-pulse 2s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse {
+      0%,100% { opacity:0.25; transform:scaleY(0.8); }
+      50%      { opacity:1;    transform:scaleY(1); }
+    }
+
+    /* ── SECTIONS ── */
+    .s-inner { max-width: 1200px; margin: 0 auto; padding: 9rem 2.5rem; }
+
+    .s-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.22em; color: var(--cyan);
+      text-transform: uppercase; margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .s-label::before { content:''; width:18px; height:1px; background:var(--cyan); }
+
+    .s-title { font-size: clamp(2rem,4.5vw,3.2rem); font-weight:700; line-height:1.1; margin-bottom:1.5rem; }
+    .s-desc  { font-size:1.05rem; color:var(--gray); line-height:1.75; max-width:620px; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity:0; transform:translateY(36px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    .d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s}
+    .d4{transition-delay:.4s} .d5{transition-delay:.5s}
+
+    /* ── CONCEPT ── */
+    #concept { background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 100%); }
+    .concept-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin-top:4rem; }
+    .c-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 2rem; position: relative; overflow: hidden;
+      backdrop-filter: blur(12px);
+      transition: border-color .4s, transform .4s, box-shadow .4s; cursor: default;
+    }
+    .c-card::after {
+      content:''; position:absolute; inset:0;
+      background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(0,200,255,0.07) 0%, transparent 60%);
+      opacity:0; transition:opacity .4s;
+    }
+    .c-card:hover::after { opacity:1; }
+    .c-card:hover { border-color:var(--border-c); transform:translateY(-5px); box-shadow:0 24px 60px rgba(0,200,255,0.07); }
+
+    .c-num  { font-family:'JetBrains Mono',monospace; font-size:.62rem; letter-spacing:.15em; color:var(--cyan); opacity:.55; margin-bottom:1.5rem; }
+    .c-icon { width:46px; height:46px; border-radius:12px; background:var(--cyan-dim); border:1px solid var(--border-c); display:flex; align-items:center; justify-content:center; font-size:1.15rem; margin-bottom:1.25rem; color:var(--cyan); font-family:'Space Grotesk',sans-serif; font-weight:700; }
+    .c-title { font-size:1.15rem; font-weight:600; color:var(--white); margin-bottom:.75rem; }
+    .c-body  { font-size:.875rem; color:var(--gray); line-height:1.65; }
+
+    /* ── ARCHITECTURE ── */
+    #architecture { background: var(--bg2); }
+    .a-layers { display:flex; flex-direction:column; gap:.75rem; margin-top:4rem; }
+    .a-layer {
+      display:grid; grid-template-columns:190px 1fr;
+      border:1px solid var(--border); border-radius:12px; overflow:hidden;
+      background:var(--surface); backdrop-filter:blur(10px);
+      transition: border-color .35s, box-shadow .35s;
+    }
+    .a-layer:hover { border-color:var(--border-c); box-shadow:0 0 32px rgba(0,200,255,0.05); }
+    .a-left {
+      background: rgba(0,200,255,0.03); border-right:1px solid var(--border);
+      padding:1.5rem 1.25rem; display:flex; flex-direction:column; justify-content:center;
+    }
+    .a-idx  { font-family:'JetBrains Mono',monospace; font-size:.58rem; letter-spacing:.18em; color:var(--cyan); opacity:.55; margin-bottom:.25rem; }
+    .a-name { font-size:.82rem; font-weight:600; color:var(--white); line-height:1.3; }
+    .a-right { padding:1.4rem 1.5rem; display:flex; align-items:center; gap:1.5rem; }
+    .a-role  { flex:1; }
+    .a-role-t { font-size:.875rem; font-weight:600; color:var(--cyan); margin-bottom:.25rem; }
+    .a-role-d { font-size:.82rem; color:var(--gray); line-height:1.5; }
+    .badge {
+      font-family:'JetBrains Mono',monospace; font-size:.58rem;
+      letter-spacing:.1em; padding:.28rem .75rem; border-radius:100px; white-space:nowrap;
+    }
+    .badge-h  { background:var(--violet-dim); color:var(--violet); border:1px solid rgba(139,92,246,0.28); }
+    .badge-ai { background:var(--cyan-dim); color:var(--cyan); border:1px solid var(--border-c); }
+    .badge-od { background:rgba(255,255,255,0.04); color:var(--gray); border:1px solid var(--border); }
+
+    /* ── CYCLE ── */
+    #cycle { background: linear-gradient(180deg, var(--bg2) 0%, var(--bg) 100%); }
+    .cycle-steps {
+      display:grid; grid-template-columns:repeat(5,1fr); gap:1rem; margin-top:5rem;
+      position:relative;
+    }
+    .cycle-steps::before {
+      content:''; position:absolute; top:31px;
+      left:calc(100%/10); right:calc(100%/10); height:1px; z-index:0;
+      background: linear-gradient(90deg, transparent, rgba(0,200,255,0.25) 20%, rgba(139,92,246,0.3) 50%, rgba(0,200,255,0.25) 80%, transparent);
+    }
+    .step { display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 .5rem; position:relative; z-index:1; }
+    .step-dot {
+      width:62px; height:62px; border-radius:50%;
+      background:var(--surface-s); border:1px solid var(--border-c);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1rem; margin-bottom:1.25rem;
+      transition: background .4s, box-shadow .4s, border-color .4s;
+      color: var(--cyan); font-family:'Space Grotesk',sans-serif; font-weight:700;
+    }
+    .step:hover .step-dot { background:var(--cyan-dim); box-shadow:0 0 28px var(--cyan-glow); border-color:var(--cyan); }
+    .step-n { font-family:'JetBrains Mono',monospace; font-size:.6rem; letter-spacing:.12em; color:var(--cyan); margin-bottom:.5rem; }
+    .step-t { font-size:.95rem; font-weight:600; color:var(--white); margin-bottom:.5rem; }
+    .step-d { font-size:.78rem; color:var(--gray); line-height:1.55; }
+
+    /* ── METRICS ── */
+    #metrics { background:var(--bg); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .metrics-grid { display:grid; grid-template-columns:repeat(4,1fr); max-width:1200px; margin:0 auto; }
+    .metric { padding:4rem 2rem; text-align:center; border-right:1px solid var(--border); transition:background .3s; }
+    .metric:last-child { border-right:none; }
+    .metric:hover { background:rgba(0,200,255,0.02); }
+    .metric-v {
+      font-family:'Space Grotesk',sans-serif;
+      font-size:clamp(2.2rem,4vw,3.2rem); font-weight:700; line-height:1; margin-bottom:.75rem;
+      background:linear-gradient(135deg, var(--cyan) 0%, var(--violet) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .metric-l { font-size:.82rem; color:var(--gray); line-height:1.55; }
+
+    /* ── MANIFESTO ── */
+    #manifesto { background:var(--bg); position:relative; overflow:hidden; }
+    #manifesto::before {
+      content:''; position:absolute;
+      width:800px; height:800px; border-radius:50%;
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      background: radial-gradient(circle, rgba(139,92,246,0.05) 0%, transparent 70%);
+      pointer-events:none;
+    }
+    .manifesto-inner { max-width:900px; margin:0 auto; padding:10rem 2.5rem; text-align:center; position:relative; z-index:1; }
+    .manifesto-q { font-size:clamp(1.75rem,4vw,2.8rem); font-weight:700; line-height:1.35; letter-spacing:-.02em; margin-bottom:3rem; color:var(--white); }
+    .manifesto-q .hl { background:linear-gradient(135deg,var(--cyan),var(--violet)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+    .m-tags { display:flex; gap:.75rem; justify-content:center; flex-wrap:wrap; }
+    .m-tag {
+      font-family:'JetBrains Mono',monospace; font-size:.7rem; letter-spacing:.12em;
+      color:var(--gray); border:1px solid var(--border); padding:.4rem 1rem; border-radius:100px;
+      transition: border-color .3s, color .3s;
+    }
+    .m-tag:hover { border-color:var(--border-c); color:var(--cyan); }
+
+    /* ── TICKER ── */
+    .ticker-wrap { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:rgba(0,200,255,0.02); padding:.85rem 0; }
+    #ticker { display:flex; width:max-content; animation:ticker 32s linear infinite; transition:opacity .25s; }
+    .ticker-item { font-family:'JetBrains Mono',monospace; font-size:.65rem; letter-spacing:.18em; color:var(--gray); padding:0 2.5rem; white-space:nowrap; }
+    .ticker-item .sep { color:var(--cyan); }
+    @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+    /* ── FOOTER ── */
+    footer { background:var(--bg3); border-top:1px solid var(--border); padding:2.5rem; }
+    .footer-in { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; }
+    .footer-logo { font-family:'Space Grotesk',sans-serif; font-size:1.15rem; font-weight:700; letter-spacing:.1em; }
+    .footer-logo span { color:var(--cyan); }
+    .footer-r { text-align:right; }
+    .footer-sys { font-family:'JetBrains Mono',monospace; font-size:.62rem; letter-spacing:.1em; color:var(--gray); margin-bottom:.25rem; }
+    .footer-tag { font-size:.75rem; color:rgba(136,136,170,0.45); }
+
+    /* ── KEYFRAMES ── */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width:1024px) {
+      .concept-grid { grid-template-columns:1fr; }
+      .metrics-grid { grid-template-columns:repeat(2,1fr); }
+      .metric:nth-child(2) { border-right:none; }
+      .metric:nth-child(1), .metric:nth-child(2) { border-bottom:1px solid var(--border); }
+    }
+    @media (max-width:768px) {
+      nav .nav-links { display:none; }
+      .cycle-steps { grid-template-columns:1fr; gap:2rem; }
+      .cycle-steps::before { display:none; }
+      .a-layer { grid-template-columns:1fr; }
+      .a-left { border-right:none; border-bottom:1px solid var(--border); }
+      .footer-in { flex-direction:column; gap:1.5rem; text-align:center; }
+      .footer-r { text-align:center; }
+      .metrics-grid { grid-template-columns:1fr; }
+      .metric { border-right:none; border-bottom:1px solid var(--border); }
+      .metric:last-child { border-bottom:none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scanline"></div>
+<div id="cursor-glow"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">ZEITH<span>.</span>CO</a>
+  <ul class="nav-links">
+    <li><a href="#concept"      data-i18n="nav_system">Sistema</a></li>
+    <li><a href="#architecture" data-i18n="nav_arch">Arquitetura</a></li>
+    <li><a href="#cycle"        data-i18n="nav_cycle">Ciclo</a></li>
+    <li><a href="#metrics"      data-i18n="nav_metrics">Métricas</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="lang-switch">
+      <button class="lang-btn active" data-lang="pt">PT</button>
+      <span class="lang-sep">/</span>
+      <button class="lang-btn" data-lang="en">EN</button>
+      <span class="lang-sep">/</span>
+      <button class="lang-btn" data-lang="es">ES</button>
+    </div>
+    <div class="nav-pill mono">AI-FIRST</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="neural"></canvas>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <div class="hero-status">
+      <span class="status-dot"></span>
+      <span data-i18n="hero_status">Sistema Online · Capital Cognitivo v1.0</span>
+    </div>
+
+    <h1 class="hero-title">
+      <div class="glitch-wrap">
+        <span class="glitch" data-text="ZEITH.CO">ZEITH<span class="dot">.</span>CO</span>
+      </div>
+    </h1>
+
+    <p class="hero-sub" data-i18n-html="hero_sub">
+      Uma organização <em>AI-first</em> que opera como um sistema cognitivo para descoberta, validação e <em>alocação assimétrica de capital</em>.
+    </p>
+
+    <div class="hero-pills">
+      <div class="hero-pill"><span class="pill-icon">◈</span> <span data-i18n="pill_studio">Venture Studio</span></div>
+      <div class="hero-pill"><span class="pill-icon">◈</span> <span data-i18n="pill_quant">Hedge Quantitativo</span></div>
+      <div class="hero-pill"><span class="pill-icon">◈</span> <span data-i18n="pill_lab">Deep Tech Lab</span></div>
+      <div class="hero-pill"><span class="pill-icon">◆</span> <span data-i18n="pill_auto">95% Autônomo</span></div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" onclick="document.getElementById('concept').scrollIntoView({behavior:'smooth'})">
+    <span data-i18n="scroll_lbl">Explorar</span>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div id="ticker"></div>
+</div>
+
+<!-- CONCEPT -->
+<section id="concept">
+  <div class="s-inner">
+    <div class="s-label reveal"   data-i18n="s1_lbl">01 · O Sistema</div>
+    <h2 class="s-title reveal d1" data-i18n-html="s1_ttl">Não é uma empresa.<br>É uma arquitetura cognitiva.</h2>
+    <p class="s-desc reveal d2"   data-i18n="s1_dsc">A Zeith Co combina três modelos operacionais distintos em um único sistema autônomo, operando com evidência empírica, alocando capital com precisão e aprendendo a cada execução.</p>
+
+    <div class="concept-grid">
+      <div class="c-card reveal d1">
+        <div class="c-num">01 / STUDIO</div>
+        <div class="c-icon">▲</div>
+        <h3 class="c-title" data-i18n="c1_ttl">Venture Studio</h3>
+        <p class="c-body"   data-i18n="c1_dsc">Pods modulares instanciados sob demanda para explorar nichos, validar hipóteses e escalar ou encerrar com base em sinais de performance empírica. Sem inércia institucional.</p>
+      </div>
+      <div class="c-card reveal d2">
+        <div class="c-num">02 / QUANT</div>
+        <div class="c-icon">◈</div>
+        <h3 class="c-title" data-i18n="c2_ttl">Hedge Quantitativo</h3>
+        <p class="c-body"   data-i18n="c2_dsc">Alocação de capital orientada por sinais de retorno assimétrico. Cada recurso (atenção, computação, tempo) é tratado como instrumento financeiro estratégico sujeito a otimização rigorosa.</p>
+      </div>
+      <div class="c-card reveal d3">
+        <div class="c-num">03 / LAB</div>
+        <div class="c-icon">⬡</div>
+        <h3 class="c-title" data-i18n="c3_ttl">Deep Tech Lab</h3>
+        <p class="c-body"   data-i18n="c3_dsc">A execução operacional gera dados proprietários que alimentam o motor de aprendizado estratégico. Cada interação é um ativo permanente, não um custo afundado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture">
+  <div class="s-inner">
+    <div class="s-label reveal"   data-i18n="s2_lbl">02 · Governança</div>
+    <h2 class="s-title reveal d1" data-i18n-html="s2_ttl">Autoridade em camadas.<br>Agilidade máxima.</h2>
+    <p class="s-desc reveal d2"   data-i18n="s2_dsc">Cinco camadas operacionais desenhadas para custo fixo mínimo, máxima velocidade de decisão e antifragilidade estrutural. O julgamento humano reservado exclusivamente para momentos de alta alavancagem.</p>
+
+    <div class="a-layers">
+      <div class="a-layer reveal d1">
+        <div class="a-left">
+          <div class="a-idx"  data-i18n="l1_idx">CAMADA 01</div>
+          <div class="a-name" data-i18n="l1_nam">Autoridade Final</div>
+        </div>
+        <div class="a-right">
+          <div class="a-role">
+            <div class="a-role-t" data-i18n="l1_rt">CEO Humano · Fundador</div>
+            <div class="a-role-d" data-i18n="l1_rd">Direção estratégica, alocação de capital e definição de propósito. Ativado exclusivamente para decisões de alto impacto e irreversíveis.</div>
+          </div>
+          <div class="badge badge-h" data-i18n="b_hum">HUMANO</div>
+        </div>
+      </div>
+
+      <div class="a-layer reveal d2">
+        <div class="a-left">
+          <div class="a-idx"  data-i18n="l2_idx">CAMADA 02</div>
+          <div class="a-name" data-i18n="l2_nam">Coordenação Sintética</div>
+        </div>
+        <div class="a-right">
+          <div class="a-role">
+            <div class="a-role-t" data-i18n="l2_rt">CV-CEO · Vice-CEO Cognitivo</div>
+            <div class="a-role-d" data-i18n="l2_rd">Sintetiza fluxos de dados, gera cenários de decisão, detecta anomalias de risco e propõe ações estruturadas de forma contínua.</div>
+          </div>
+          <div class="badge badge-ai" data-i18n="b_ai">AGÊNTICO</div>
+        </div>
+      </div>
+
+      <div class="a-layer reveal d3">
+        <div class="a-left">
+          <div class="a-idx"  data-i18n="l3_idx">CAMADA 03</div>
+          <div class="a-name" data-i18n="l3_nam">Liderança Funcional</div>
+        </div>
+        <div class="a-right">
+          <div class="a-role">
+            <div class="a-role-t" data-i18n="l3_rt">Diretores Agênticos</div>
+            <div class="a-role-d" data-i18n="l3_rd">Gestores de domínio para Inteligência, Growth, Produto e Capital, operando de forma autônoma dentro de parâmetros estratégicos definidos.</div>
+          </div>
+          <div class="badge badge-ai" data-i18n="b_ai">AGÊNTICO</div>
+        </div>
+      </div>
+
+      <div class="a-layer reveal d4">
+        <div class="a-left">
+          <div class="a-idx"  data-i18n="l4_idx">CAMADA 04</div>
+          <div class="a-name" data-i18n="l4_nam">Execução de Mercado</div>
+        </div>
+        <div class="a-right">
+          <div class="a-role">
+            <div class="a-role-t" data-i18n="l4_rt">Pods Autônomos</div>
+            <div class="a-role-d" data-i18n="l4_rd">Unidades modulares para exploração de nichos e validação de hipóteses. Cada uma instanciada com orçamentos de tokens e escopos de experimento definidos.</div>
+          </div>
+          <div class="badge badge-ai" data-i18n="b_ai">AGÊNTICO</div>
+        </div>
+      </div>
+
+      <div class="a-layer reveal d5">
+        <div class="a-left">
+          <div class="a-idx"  data-i18n="l5_idx">CAMADA 05</div>
+          <div class="a-name" data-i18n="l5_nam">Suporte Estratégico</div>
+        </div>
+        <div class="a-right">
+          <div class="a-role">
+            <div class="a-role-t" data-i18n="l5_rt">Jurídico &amp; Contabilidade · Sob Demanda</div>
+            <div class="a-role-d" data-i18n="l5_rd">Expertise especializada ativada por gatilhos de dados ou sinais de risco legal. Zero overhead fixo. Máxima responsividade.</div>
+          </div>
+          <div class="badge badge-od" data-i18n="b_od">SOB DEMANDA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CYCLE -->
+<section id="cycle">
+  <div class="s-inner">
+    <div class="s-label reveal"   data-i18n="s3_lbl">03 · Ciclo Operacional</div>
+    <h2 class="s-title reveal d1" data-i18n-html="s3_ttl">Cinco etapas.<br>Loop fechado. Sinal puro.</h2>
+    <p class="s-desc reveal d2"   data-i18n="s3_dsc">Cada ciclo de execução gera dados proprietários que alimentam a próxima decisão. Sem desperdício, sem deriva. Apenas iteração com acumulação de evidências.</p>
+
+    <div class="cycle-steps">
+      <div class="step reveal">
+        <div class="step-dot">◉</div>
+        <div class="step-n">01</div>
+        <div class="step-t" data-i18n="st1_t">Descoberta</div>
+        <p class="step-d"   data-i18n="st1_d">Monitoramento de sinais de mercado para identificação empírica de nichos com potencial de retorno assimétrico.</p>
+      </div>
+      <div class="step reveal d1">
+        <div class="step-dot">◫</div>
+        <div class="step-n">02</div>
+        <div class="step-t" data-i18n="st2_t">Criação de Pod</div>
+        <p class="step-d"   data-i18n="st2_d">Uma unidade modular é instanciada com orçamento definido de tokens e parâmetros de experimento.</p>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-dot">◇</div>
+        <div class="step-n">03</div>
+        <div class="step-t" data-i18n="st3_t">Validação</div>
+        <p class="step-d"   data-i18n="st3_d">Ciclos rápidos de prospecção testam o fit oferta-mercado com gasto mínimo de recursos.</p>
+      </div>
+      <div class="step reveal d3">
+        <div class="step-dot">◎</div>
+        <div class="step-n">04</div>
+        <div class="step-t" data-i18n="st4_t">Aprendizado</div>
+        <p class="step-d"   data-i18n="st4_d">Dados de performance alimentam o Data Flywheel, refinando continuamente o motor cognitivo.</p>
+      </div>
+      <div class="step reveal d4">
+        <div class="step-dot">△</div>
+        <div class="step-n">05</div>
+        <div class="step-t" data-i18n="st5_t">Escalar ou Encerrar</div>
+        <p class="step-d"   data-i18n="st5_d">O CV-CEO propõe expansão ou descontinuação imediata. Sem inércia. Sinal puro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<section id="metrics">
+  <div class="metrics-grid">
+    <div class="metric reveal">
+      <div class="metric-v" data-count="95">0%</div>
+      <div class="metric-l" data-i18n-html="m1_l">Taxa-alvo de operação<br>autônoma</div>
+    </div>
+    <div class="metric reveal d1">
+      <div class="metric-v" data-i18n="m2_v">Zero Cloud</div>
+      <div class="metric-l" data-i18n-html="m2_l">Inferência AI local<br>zero dependência de nuvem</div>
+    </div>
+    <div class="metric reveal d2">
+      <div class="metric-v" data-i18n="m3_v">5 Camadas</div>
+      <div class="metric-l" data-i18n-html="m3_l">Arquitetura de governança<br>zero overhead fixo</div>
+    </div>
+    <div class="metric reveal d3">
+      <div class="metric-v">&#8734;</div>
+      <div class="metric-l" data-i18n-html="m4_l">Escala sem aumento proporcional<br>de esforço humano</div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="manifesto-inner">
+    <p class="manifesto-q reveal" data-i18n-html="man_q">
+      Não buscamos clientes.<br>Nós os <span class="hl">encontramos</span> com precisão,<br>com evidência, <span class="hl">em escala global</span>.
+    </p>
+    <div class="m-tags reveal d2">
+      <span class="m-tag" data-i18n="mtag1">AI-FIRST</span>
+      <span class="m-tag" data-i18n="mtag2">SOBERANO</span>
+      <span class="m-tag" data-i18n="mtag3">ANTIFRÁGIL</span>
+      <span class="m-tag" data-i18n="mtag4">ORIENTADO A DADOS</span>
+      <span class="m-tag" data-i18n="mtag5">RETORNOS ASSIMÉTRICOS</span>
+      <span class="m-tag" data-i18n="mtag6">ZERO RUÍDO</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-in">
+    <div class="footer-logo">ZEITH<span>.</span>CO</div>
+    <div class="footer-r">
+      <div class="footer-sys mono" data-i18n="f_sys">SYS:CAPITAL_COGNITIVO_v1.0 · GLOBAL</div>
+      <div class="footer-tag"      data-i18n="f_tag">Organização AI-First · Operações Autônomas</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ─── TRANSLATIONS ────────────────────────────────── */
+const I18N = {
+  pt: {
+    nav_system:'Sistema', nav_arch:'Arquitetura', nav_cycle:'Ciclo', nav_metrics:'Métricas',
+    hero_status:'Sistema Online · Capital Cognitivo v1.0',
+    hero_sub:'Uma organização <em>AI-first</em> que opera como um sistema cognitivo para descoberta, validação e <em>alocação assimétrica de capital</em>.',
+    pill_studio:'Venture Studio', pill_quant:'Hedge Quantitativo', pill_lab:'Deep Tech Lab', pill_auto:'95% Autônomo',
+    scroll_lbl:'Explorar',
+    s1_lbl:'01 · O Sistema',
+    s1_ttl:'Não é uma empresa.<br>É uma arquitetura cognitiva.',
+    s1_dsc:'A Zeith Co combina três modelos operacionais distintos em um único sistema autônomo, operando com evidência empírica, alocando capital com precisão e aprendendo a cada execução.',
+    c1_ttl:'Venture Studio',
+    c1_dsc:'Pods modulares instanciados sob demanda para explorar nichos, validar hipóteses e escalar ou encerrar com base em sinais de performance empírica. Sem inércia institucional.',
+    c2_ttl:'Hedge Quantitativo',
+    c2_dsc:'Alocação de capital orientada por sinais de retorno assimétrico. Cada recurso (atenção, computação, tempo) é tratado como instrumento financeiro estratégico sujeito a otimização rigorosa.',
+    c3_ttl:'Deep Tech Lab',
+    c3_dsc:'A execução operacional gera dados proprietários que alimentam o motor de aprendizado estratégico. Cada interação é um ativo permanente, não um custo afundado.',
+    s2_lbl:'02 · Governança',
+    s2_ttl:'Autoridade em camadas.<br>Agilidade máxima.',
+    s2_dsc:'Cinco camadas operacionais desenhadas para custo fixo mínimo, máxima velocidade de decisão e antifragilidade estrutural. O julgamento humano reservado exclusivamente para momentos de alta alavancagem.',
+    l1_idx:'CAMADA 01', l1_nam:'Autoridade Final', l1_rt:'CEO Humano · Fundador',
+    l1_rd:'Direção estratégica, alocação de capital e definição de propósito. Ativado exclusivamente para decisões de alto impacto e irreversíveis.',
+    l2_idx:'CAMADA 02', l2_nam:'Coordenação Sintética', l2_rt:'CV-CEO · Vice-CEO Cognitivo',
+    l2_rd:'Sintetiza fluxos de dados, gera cenários de decisão, detecta anomalias de risco e propõe ações estruturadas de forma contínua.',
+    l3_idx:'CAMADA 03', l3_nam:'Liderança Funcional', l3_rt:'Diretores Agênticos',
+    l3_rd:'Gestores de domínio para Inteligência, Growth, Produto e Capital, operando de forma autônoma dentro de parâmetros estratégicos definidos.',
+    l4_idx:'CAMADA 04', l4_nam:'Execução de Mercado', l4_rt:'Pods Autônomos',
+    l4_rd:'Unidades modulares para exploração de nichos e validação de hipóteses. Cada uma instanciada com orçamentos de tokens e escopos de experimento definidos.',
+    l5_idx:'CAMADA 05', l5_nam:'Suporte Estratégico', l5_rt:'Jurídico & Contabilidade · Sob Demanda',
+    l5_rd:'Expertise especializada ativada por gatilhos de dados ou sinais de risco legal. Zero overhead fixo. Máxima responsividade.',
+    b_hum:'HUMANO', b_ai:'AGÊNTICO', b_od:'SOB DEMANDA',
+    s3_lbl:'03 · Ciclo Operacional',
+    s3_ttl:'Cinco etapas.<br>Loop fechado. Sinal puro.',
+    s3_dsc:'Cada ciclo de execução gera dados proprietários que alimentam a próxima decisão. Sem desperdício, sem deriva. Apenas iteração com acumulação de evidências.',
+    st1_t:'Descoberta',  st1_d:'Monitoramento de sinais de mercado para identificação empírica de nichos com potencial de retorno assimétrico.',
+    st2_t:'Criação de Pod', st2_d:'Uma unidade modular é instanciada com orçamento definido de tokens e parâmetros de experimento.',
+    st3_t:'Validação',   st3_d:'Ciclos rápidos de prospecção testam o fit oferta-mercado com gasto mínimo de recursos.',
+    st4_t:'Aprendizado', st4_d:'Dados de performance alimentam o Data Flywheel, refinando continuamente o motor cognitivo.',
+    st5_t:'Escalar ou Encerrar', st5_d:'O CV-CEO propõe expansão ou descontinuação imediata. Sem inércia. Sinal puro.',
+    m1_l:'Taxa-alvo de operação<br>autônoma',
+    m2_v:'Zero Cloud',     m2_l:'Inferência AI local<br>zero dependência de nuvem',
+    m3_v:'5 Camadas',    m3_l:'Arquitetura de governança<br>zero overhead fixo',
+    m4_l:'Escala sem aumento proporcional<br>de esforço humano',
+    man_q:'Não buscamos clientes.<br>Nós os <span class="hl">encontramos</span> com precisão,<br>com evidência, <span class="hl">em escala global</span>.',
+    mtag1:'AI-FIRST', mtag2:'SOBERANO', mtag3:'ANTIFRÁGIL', mtag4:'ORIENTADO A DADOS', mtag5:'RETORNOS ASSIMÉTRICOS', mtag6:'ZERO RUÍDO',
+    f_sys:'SYS:CAPITAL_COGNITIVO_v1.0 · GLOBAL', f_tag:'Organização AI-First · Operações Autônomas',
+  },
+  en: {
+    nav_system:'System', nav_arch:'Architecture', nav_cycle:'Cycle', nav_metrics:'Metrics',
+    hero_status:'System Online · Cognitive Capital v1.0',
+    hero_sub:'An <em>AI-first</em> organization operating as a cognitive system for discovery, validation, and <em>asymmetric capital allocation</em>.',
+    pill_studio:'Venture Studio', pill_quant:'Quantitative Hedge', pill_lab:'Deep Tech Lab', pill_auto:'95% Autonomous',
+    scroll_lbl:'Explore',
+    s1_lbl:'01 · The System',
+    s1_ttl:'Not a company.<br>A cognitive architecture.',
+    s1_dsc:'Zeith Co combines three distinct operating models into a single autonomous system, running on empirical evidence, deploying capital with precision and learning with every execution.',
+    c1_ttl:'Venture Studio',
+    c1_dsc:'Modular pods instantiated on demand to explore niches, validate hypotheses, and scale or terminate based on empirical performance signals. Zero institutional inertia.',
+    c2_ttl:'Quantitative Hedge',
+    c2_dsc:'Capital allocation driven by asymmetric return signals. Every resource (attention, compute, time) is treated as a strategic financial instrument subject to rigorous optimization.',
+    c3_ttl:'Deep Tech Lab',
+    c3_dsc:'Operational execution generates proprietary data that feeds the strategic learning engine. Each interaction is a permanent asset, not a sunk cost.',
+    s2_lbl:'02 · Governance',
+    s2_ttl:'Layered authority.<br>Maximum agility.',
+    s2_dsc:'Five operational layers designed for minimum fixed cost, maximum decision velocity, and structural antifragility. Human judgment reserved exclusively for high-leverage moments.',
+    l1_idx:'LAYER 01', l1_nam:'Final Authority', l1_rt:'Human CEO · Founder',
+    l1_rd:'Strategic direction, capital allocation, and purpose definition. Activated exclusively for high-impact, irreversible decisions.',
+    l2_idx:'LAYER 02', l2_nam:'Synthetic Coordination', l2_rt:'CV-CEO · Cognitive Vice CEO',
+    l2_rd:'Synthesizes data streams, generates decision scenarios, detects risk anomalies, and proposes structured actions continuously.',
+    l3_idx:'LAYER 03', l3_nam:'Functional Leadership', l3_rt:'Agentic Directors',
+    l3_rd:'Domain managers for Intelligence, Growth, Product, and Capital, operating autonomously within defined strategic parameters.',
+    l4_idx:'LAYER 04', l4_nam:'Market Execution', l4_rt:'Autonomous Pods',
+    l4_rd:'Modular units for niche exploration and hypothesis validation. Each instantiated with defined token budgets and bounded experiment scopes.',
+    l5_idx:'LAYER 05', l5_nam:'Strategic Support', l5_rt:'Legal & Accounting · On-Demand',
+    l5_rd:'Specialized expertise activated by data triggers or legal risk signals. Zero fixed overhead. Maximum responsiveness.',
+    b_hum:'HUMAN', b_ai:'AGENTIC', b_od:'ON-DEMAND',
+    s3_lbl:'03 · Operational Cycle',
+    s3_ttl:'Five steps.<br>Closed loop. Pure signal.',
+    s3_dsc:'Each execution cycle generates proprietary data that feeds the next decision. No waste, no drift. Only evidence-compounding iteration.',
+    st1_t:'Discovery',   st1_d:'Market signal monitoring for empirical niche identification with asymmetric return potential.',
+    st2_t:'Pod Creation', st2_d:'A modular unit is instantiated with a defined budget of tokens and experiment parameters.',
+    st3_t:'Validation',  st3_d:'Rapid prospecting cycles test offer-market fit with minimum resource expenditure.',
+    st4_t:'Learning',    st4_d:'Performance data feeds the Data Flywheel, continuously refining the cognitive engine.',
+    st5_t:'Scale or Close', st5_d:'CV-CEO proposes expansion or immediate discontinuation. No inertia. Pure signal.',
+    m1_l:'Target autonomous<br>operation rate',
+    m2_v:'Zero Cloud',  m2_l:'Local AI inference<br>zero cloud dependency',
+    m3_v:'5-Layer',     m3_l:'Governance architecture<br>zero fixed overhead',
+    m4_l:'Scale without proportional<br>increase in human effort',
+    man_q:'We don\'t search for clients.<br>We <span class="hl">find them</span> with precision,<br>with evidence, <span class="hl">at global scale</span>.',
+    mtag1:'AI-FIRST', mtag2:'SOVEREIGN', mtag3:'ANTIFRAGILE', mtag4:'DATA-DRIVEN', mtag5:'ASYMMETRIC RETURNS', mtag6:'ZERO NOISE',
+    f_sys:'SYS:COGNITIVE_CAPITAL_v1.0 · GLOBAL', f_tag:'AI-First Organization · Autonomous Operations',
+  },
+  es: {
+    nav_system:'Sistema', nav_arch:'Arquitectura', nav_cycle:'Ciclo', nav_metrics:'Métricas',
+    hero_status:'Sistema en Línea · Capital Cognitivo v1.0',
+    hero_sub:'Una organización <em>AI-first</em> que opera como un sistema cognitivo para el descubrimiento, validación y <em>asignación asimétrica de capital</em>.',
+    pill_studio:'Venture Studio', pill_quant:'Hedge Cuantitativo', pill_lab:'Deep Tech Lab', pill_auto:'95% Autónomo',
+    scroll_lbl:'Explorar',
+    s1_lbl:'01 · El Sistema',
+    s1_ttl:'No es una empresa.<br>Es una arquitectura cognitiva.',
+    s1_dsc:'Zeith Co combina tres modelos operativos distintos en un único sistema autónomo, operando con evidencia empírica, desplegando capital con precisión y aprendiendo con cada ejecución.',
+    c1_ttl:'Venture Studio',
+    c1_dsc:'Pods modulares instanciados bajo demanda para explorar nichos, validar hipótesis y escalar o terminar basándose en señales de rendimiento empírico. Sin inercia institucional.',
+    c2_ttl:'Hedge Cuantitativo',
+    c2_dsc:'Asignación de capital impulsada por señales de retorno asimétrico. Cada recurso (atención, cómputo, tiempo) se trata como un instrumento financiero estratégico sujeto a optimización rigurosa.',
+    c3_ttl:'Deep Tech Lab',
+    c3_dsc:'La ejecución operativa genera datos propietarios que alimentan el motor de aprendizaje estratégico. Cada interacción es un activo permanente, no un costo hundido.',
+    s2_lbl:'02 · Gobernanza',
+    s2_ttl:'Autoridad en capas.<br>Máxima agilidad.',
+    s2_dsc:'Cinco capas operativas diseñadas para costo fijo mínimo, máxima velocidad de decisión y antifragilidad estructural. El juicio humano reservado exclusivamente para momentos de alto apalancamiento.',
+    l1_idx:'CAPA 01', l1_nam:'Autoridad Final', l1_rt:'CEO Humano · Fundador',
+    l1_rd:'Dirección estratégica, asignación de capital y definición de propósito. Activado exclusivamente para decisiones de alto impacto e irreversibles.',
+    l2_idx:'CAPA 02', l2_nam:'Coordinación Sintética', l2_rt:'CV-CEO · Vicepresidente Cognitivo',
+    l2_rd:'Sintetiza flujos de datos, genera escenarios de decisión, detecta anomalías de riesgo y propone acciones estructuradas de forma continua.',
+    l3_idx:'CAPA 03', l3_nam:'Liderazgo Funcional', l3_rt:'Directores Agénticos',
+    l3_rd:'Gestores de dominio para Inteligencia, Crecimiento, Producto y Capital, operando de forma autónoma dentro de parámetros estratégicos definidos.',
+    l4_idx:'CAPA 04', l4_nam:'Ejecución de Mercado', l4_rt:'Pods Autónomos',
+    l4_rd:'Unidades modulares para exploración de nichos y validación de hipótesis. Cada una instanciada con presupuestos de tokens y alcances de experimento definidos.',
+    l5_idx:'CAPA 05', l5_nam:'Soporte Estratégico', l5_rt:'Legal & Contabilidad · Bajo Demanda',
+    l5_rd:'Experiencia especializada activada por disparadores de datos o señales de riesgo legal. Cero overhead fijo. Máxima capacidad de respuesta.',
+    b_hum:'HUMANO', b_ai:'AGÉNTICO', b_od:'BAJO DEMANDA',
+    s3_lbl:'03 · Ciclo Operativo',
+    s3_ttl:'Cinco pasos.<br>Bucle cerrado. Señal pura.',
+    s3_dsc:'Cada ciclo de ejecución genera datos propietarios que alimentan la siguiente decisión. Sin desperdicio, sin deriva. Solo iteración con acumulación de evidencia.',
+    st1_t:'Descubrimiento', st1_d:'Monitoreo de señales de mercado para identificación empírica de nichos con potencial de retorno asimétrico.',
+    st2_t:'Creación de Pod', st2_d:'Una unidad modular es instanciada con un presupuesto definido de tokens y parámetros de experimento.',
+    st3_t:'Validación',     st3_d:'Ciclos rápidos de prospección ponen a prueba el ajuste oferta-mercado con gasto mínimo de recursos.',
+    st4_t:'Aprendizaje',    st4_d:'Los datos de rendimiento alimentan el Data Flywheel, refinando continuamente el motor cognitivo.',
+    st5_t:'Escalar o Cerrar', st5_d:'El CV-CEO propone expansión o discontinuación inmediata. Sin inercia. Señal pura.',
+    m1_l:'Tasa objetivo de operación<br>autónoma',
+    m2_v:'Zero Cloud',   m2_l:'Inferencia AI local<br>cero dependencia de la nube',
+    m3_v:'5 Capas',    m3_l:'Arquitectura de gobernanza<br>cero overhead fijo',
+    m4_l:'Escala sin aumento proporcional<br>del esfuerzo humano',
+    man_q:'No buscamos clientes.<br>Los <span class="hl">encontramos</span> con precisión,<br>con evidencia, <span class="hl">a escala global</span>.',
+    mtag1:'AI-FIRST', mtag2:'SOBERANO', mtag3:'ANTIFRÁGIL', mtag4:'BASADO EN DATOS', mtag5:'RETORNOS ASIMÉTRICOS', mtag6:'CERO RUIDO',
+    f_sys:'SYS:CAPITAL_COGNITIVO_v1.0 · GLOBAL', f_tag:'Organización AI-First · Operaciones Autónomas',
+  }
+};
+
+const TICKER = {
+  pt: ['RETORNOS ASSIMÉTRICOS','FLYWHEEL DE DADOS','ARQUITETURA COGNITIVA','95% AUTONOMIA','OPERAÇÕES AI-NATIVE','DESIGN ANTIFRÁGIL','ZERO RUÍDO','ESCALA GLOBAL','INFERÊNCIA LOCAL','INTELIGÊNCIA SOBERANA'],
+  en: ['ASYMMETRIC RETURNS','DATA FLYWHEEL','COGNITIVE ARCHITECTURE','95% AUTONOMY','AI-NATIVE OPERATIONS','ANTIFRAGILE DESIGN','ZERO NOISE','GLOBAL SCALE','LOCAL INFERENCE','SOVEREIGN INTELLIGENCE'],
+  es: ['RETORNOS ASIMÉTRICOS','FLYWHEEL DE DATOS','ARQUITECTURA COGNITIVA','95% AUTONOMÍA','OPERACIONES AI-NATIVE','DISEÑO ANTIFRÁGIL','CERO RUIDO','ESCALA GLOBAL','INFERENCIA LOCAL','INTELIGENCIA SOBERANA'],
+};
+
+/* ─── I18N ENGINE ────────────────────────────────── */
+let currentLang = 'pt';
+
+function setLanguage(lang) {
+  currentLang = lang;
+  const t = I18N[lang];
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = t[el.dataset.i18n];
+    if (v !== undefined) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const v = t[el.dataset.i18nHtml];
+    if (v !== undefined) el.innerHTML = v;
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang)
+  );
+
+  updateTicker(lang);
+}
+
+function updateTicker(lang) {
+  const items = TICKER[lang];
+  const doubled = [...items, ...items];
+  const el = document.getElementById('ticker');
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.innerHTML = doubled.map(item =>
+      `<span class="ticker-item">${item}<span class="sep"> ✦ </span></span>`
+    ).join('');
+    el.style.animation = 'none';
+    void el.offsetWidth;
+    el.style.animation = 'ticker 32s linear infinite';
+    el.style.opacity = '1';
+  }, 200);
+}
+
+document.querySelectorAll('.lang-btn').forEach(btn =>
+  btn.addEventListener('click', () => setLanguage(btn.dataset.lang))
+);
+
+// Init ticker and language
+updateTicker('pt');
+
+/* ─── NEURAL NETWORK CANVAS ──────────────────────── */
+(function () {
+  const canvas = document.getElementById('neural');
+  const ctx = canvas.getContext('2d');
+  let nodes = [], mouse = { x: -9999, y: -9999 }, raf;
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  function spawn() {
+    nodes = [];
+    const n = Math.min(90, Math.floor(canvas.width / 14));
+    for (let i = 0; i < n; i++) {
+      nodes.push({
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.45, vy: (Math.random() - 0.5) * 0.45,
+        r: Math.random() * 1.4 + 0.4, op: Math.random() * 0.35 + 0.1,
+        ph: Math.random() * Math.PI * 2, ps: Math.random() * 0.015 + 0.005,
+      });
+    }
+  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const t = Date.now() * 0.001;
+    const D = 155;
+    nodes.forEach(n => {
+      const dx = n.x - mouse.x, dy = n.y - mouse.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < 14400) { const d = Math.sqrt(d2), f = ((120 - d) / 120) * 0.32; n.vx += (dx/d)*f; n.vy += (dy/d)*f; }
+      n.vx *= 0.988; n.vy *= 0.988;
+      const sp = Math.sqrt(n.vx*n.vx + n.vy*n.vy);
+      if (sp > 1) { n.vx /= sp; n.vy /= sp; }
+      n.x += n.vx; n.y += n.vy;
+      if (n.x < -20) n.x = canvas.width + 20;
+      if (n.x > canvas.width + 20) n.x = -20;
+      if (n.y < -20) n.y = canvas.height + 20;
+      if (n.y > canvas.height + 20) n.y = -20;
+      const op = n.op + Math.sin(t * n.ps * 60 + n.ph) * 0.08;
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(0,200,255,${op})`; ctx.fill();
+    });
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i+1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x-b.x, dy = a.y-b.y, d = Math.sqrt(dx*dx+dy*dy);
+        if (d < D) {
+          const op = (1 - d/D) * 0.18;
+          const mx = (a.x+b.x)*0.5, my = (a.y+b.y)*0.5;
+          const mdd = Math.sqrt((mx-mouse.x)**2+(my-mouse.y)**2);
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.strokeStyle = mdd < 140 ? `rgba(139,92,246,${op*1.6})` : `rgba(0,200,255,${op})`;
+          ctx.lineWidth = 0.5; ctx.stroke();
+        }
+      }
+    }
+    raf = requestAnimationFrame(draw);
+  }
+  resize(); spawn(); draw();
+  window.addEventListener('resize', () => { resize(); spawn(); });
+  window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  document.addEventListener('visibilitychange', () => document.hidden ? cancelAnimationFrame(raf) : draw());
+})();
+
+/* ─── CURSOR GLOW ────────────────────────────────── */
+(function () {
+  const g = document.getElementById('cursor-glow');
+  window.addEventListener('mousemove', e => { g.style.left = e.clientX+'px'; g.style.top = e.clientY+'px'; });
+})();
+
+/* ─── NAV SCROLL ─────────────────────────────────── */
+window.addEventListener('scroll', () =>
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50)
+);
+
+/* ─── SCROLL REVEAL ──────────────────────────────── */
+(function () {
+  const io = new IntersectionObserver(entries =>
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
+    { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+})();
+
+/* ─── COUNTER ANIMATION ──────────────────────────── */
+(function () {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const el = e.target, target = parseInt(el.dataset.count);
+      if (isNaN(target)) return;
+      io.unobserve(el);
+      const start = performance.now(), dur = 2200;
+      (function tick(now) {
+        const p = Math.min((now - start) / dur, 1);
+        const ease = 1 - Math.pow(1-p, 3);
+        el.textContent = Math.floor(ease * target) + '%';
+        if (p < 1) requestAnimationFrame(tick);
+      })(start);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-count]').forEach(el => io.observe(el));
+})();
+
+/* ─── CARD MOUSE GLOW ────────────────────────────── */
+document.querySelectorAll('.c-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100)+'%');
+    card.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
+  });
+});
+
+/* ─── SMOOTH SCROLL ──────────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a =>
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior:'smooth', block:'start' });
+  })
+);
+</script>
+</body>
+</html>
