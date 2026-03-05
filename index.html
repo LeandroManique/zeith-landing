@@ -217,6 +217,14 @@
       opacity: 0; animation: fadeUp 0.8s ease 0.65s forwards;
     }
     .hero-sub em { font-style: normal; color: var(--white); font-weight: 500; }
+    .hero-line {
+      font-size: clamp(0.92rem, 2vw, 1.08rem);
+      line-height: 1.6;
+      color: rgba(239,239,255,0.82);
+      max-width: 640px;
+      margin-bottom: 1.65rem;
+      opacity: 0; animation: fadeUp 0.8s ease 0.74s forwards;
+    }
 
     .hero-pills {
       display: flex; flex-wrap: wrap; gap: 0.75rem;
@@ -486,6 +494,13 @@
         margin-bottom: 1.2rem;
         color: #c6cae0;
       }
+      .hero-line {
+        text-align: left;
+        font-size: 1rem;
+        line-height: 1.55;
+        margin-bottom: 1rem;
+        color: #d6dbef;
+      }
       .hero-pills {
         justify-content: flex-start;
         gap: 0.6rem;
@@ -620,6 +635,7 @@
       .hero-status { font-size: 0.66rem; margin-bottom: 0.9rem; }
       .hero-title { font-size: clamp(2.6rem, 16.5vw, 3.45rem); }
       .hero-sub { font-size: 1rem; }
+      .hero-line { font-size: 0.95rem; margin-bottom: 0.9rem; }
       .hero-pill { font-size: 0.68rem; padding: 0.5rem 0.82rem; }
 
       .s-inner { padding: 3.5rem 0.85rem; }
@@ -678,6 +694,9 @@
 
     <p class="hero-sub" data-i18n-html="hero_sub">
       Uma organização <em>AI-first</em> que opera como um sistema cognitivo para descoberta, validação e <em>alocação assimétrica de capital</em>.
+    </p>
+    <p class="hero-line" data-i18n="hero_line">
+      Desenvolvemos soluções verticais de software para negócios físicos, da descoberta ao crescimento.
     </p>
 
     <div class="hero-pills">
@@ -909,6 +928,7 @@ const I18N = {
     nav_system:'Sistema', nav_arch:'Arquitetura', nav_cycle:'Ciclo', nav_metrics:'Métricas',
     hero_status:'Sistema Online · Capital Cognitivo v1.0',
     hero_sub:'Uma organização <em>AI-first</em> que opera como um sistema cognitivo para descoberta, validação e <em>alocação assimétrica de capital</em>.',
+    hero_line:'Desenvolvemos soluções verticais de software para negócios físicos, da descoberta ao crescimento.',
     pill_studio:'Estúdio de Ventures', pill_quant:'Hedge Quantitativo', pill_lab:'Laboratório Deep Tech', pill_auto:'95% Autônomo',
     scroll_lbl:'Explorar',
     s1_lbl:'01 · O Sistema',
@@ -955,6 +975,7 @@ const I18N = {
     nav_system:'System', nav_arch:'Architecture', nav_cycle:'Cycle', nav_metrics:'Metrics',
     hero_status:'System Online · Cognitive Capital v1.0',
     hero_sub:'An <em>AI-first</em> organization operating as a cognitive system for discovery, validation, and <em>asymmetric capital allocation</em>.',
+    hero_line:'We develop vertical software solutions for physical businesses, from discovery to growth.',
     pill_studio:'Venture Studio', pill_quant:'Quantitative Hedge', pill_lab:'Deep Tech Lab', pill_auto:'95% Autonomous',
     scroll_lbl:'Explore',
     s1_lbl:'01 · The System',
@@ -1001,6 +1022,7 @@ const I18N = {
     nav_system:'Sistema', nav_arch:'Arquitectura', nav_cycle:'Ciclo', nav_metrics:'Métricas',
     hero_status:'Sistema en Línea · Capital Cognitivo v1.0',
     hero_sub:'Una organización <em>AI-first</em> que opera como un sistema cognitivo para el descubrimiento, validación y <em>asignación asimétrica de capital</em>.',
+    hero_line:'Desarrollamos soluciones verticales de software para negocios físicos, del descubrimiento al crecimiento.',
     pill_studio:'Estudio de Ventures', pill_quant:'Hedge Cuantitativo', pill_lab:'Laboratorio Deep Tech', pill_auto:'95% Autónomo',
     scroll_lbl:'Explorar',
     s1_lbl:'01 · El Sistema',
