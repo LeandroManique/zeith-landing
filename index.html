@@ -654,6 +654,64 @@
       .m-tag { font-size: 0.64rem; }
       .footer-contact { font-size: 0.7rem; }
     }
+
+    /* ── WORLD CLOCKS ── */
+    .clocks-band {
+      background: var(--bg3);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .clocks-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .clock-item {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-right: 1px solid var(--border);
+      position: relative;
+    }
+    .clock-item:last-child { border-right: none; }
+    .clock-city {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 0.6rem;
+    }
+    .clock-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+    @keyframes clock-pulse {
+      0%   { text-shadow: 0 0 22px rgba(0,200,255,0.9), 0 0 8px rgba(0,200,255,0.6); color: var(--cyan); }
+      55%  { text-shadow: 0 0 10px rgba(0,200,255,0.2); color: rgba(239,239,255,0.95); }
+      100% { text-shadow: 0 0 0px rgba(0,200,255,0); color: var(--white); }
+    }
+    .clock-time.tick { animation: clock-pulse 0.85s ease-out forwards; }
+
+    @media (max-width: 768px) {
+      .clocks-grid { grid-template-columns: repeat(2, 1fr); }
+      .clock-item {
+        padding: 1.4rem 0.75rem;
+        border-bottom: 1px solid var(--border);
+      }
+      .clock-item:nth-child(2) { border-right: none; }
+      .clock-item:nth-child(3),
+      .clock-item:nth-child(4) { border-bottom: none; }
+      .clock-item:nth-child(4) { border-right: none; }
+      .clock-time { font-size: 1.2rem; }
+      .clock-city { font-size: 0.56rem; letter-spacing: 0.14em; }
+    }
+    @media (max-width: 420px) {
+      .clock-time { font-size: 1.08rem; }
+    }
   </style>
 </head>
 <body>
@@ -916,6 +974,28 @@
     </div>
   </div>
 </section>
+
+<!-- WORLD CLOCKS -->
+<div class="clocks-band">
+  <div class="clocks-grid">
+    <div class="clock-item">
+      <div class="clock-city">São Paulo</div>
+      <div class="clock-time" data-tz="America/Sao_Paulo"></div>
+    </div>
+    <div class="clock-item">
+      <div class="clock-city">New York</div>
+      <div class="clock-time" data-tz="America/New_York"></div>
+    </div>
+    <div class="clock-item">
+      <div class="clock-city">London</div>
+      <div class="clock-time" data-tz="Europe/London"></div>
+    </div>
+    <div class="clock-item">
+      <div class="clock-city">Singapore</div>
+      <div class="clock-time" data-tz="Asia/Singapore"></div>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -1249,6 +1329,36 @@ document.querySelectorAll('a[href^="#"]').forEach(a =>
     if (t) t.scrollIntoView({ behavior:'smooth', block:'start' });
   })
 );
+
+/* ─── WORLD CLOCKS ───────────────────────────────── */
+(function () {
+  const clocks = document.querySelectorAll('.clock-time[data-tz]');
+  const fmts = {};
+  clocks.forEach(el => {
+    fmts[el.dataset.tz] = new Intl.DateTimeFormat('en-GB', {
+      timeZone: el.dataset.tz,
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false
+    });
+  });
+
+  function tick() {
+    const now = new Date();
+    clocks.forEach(el => {
+      const t = fmts[el.dataset.tz].format(now);
+      if (el.textContent !== t) {
+        el.textContent = t;
+        el.classList.remove('tick');
+        void el.offsetWidth;
+        el.classList.add('tick');
+      }
+    });
+  }
+
+  tick();
+  const delay = 1000 - (Date.now() % 1000);
+  setTimeout(function loop() { tick(); setTimeout(loop, 1000); }, delay);
+})();
 </script>
 </body>
 </html>
