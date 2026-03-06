@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plano de Estudos · ZEITH.CO</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:         #05050F;
+      --bg2:        #07071A;
+      --bg3:        #030308;
+      --surface:    rgba(13,13,30,0.85);
+      --cyan:       #00C8FF;
+      --cyan-dim:   rgba(0,200,255,0.10);
+      --cyan-glow:  rgba(0,200,255,0.30);
+      --violet:     #8B5CF6;
+      --violet-dim: rgba(139,92,246,0.10);
+      --green:      #22c55e;
+      --green-dim:  rgba(34,197,94,0.10);
+      --amber:      #F59E0B;
+      --amber-dim:  rgba(245,158,11,0.10);
+      --white:      #EFEFFF;
+      --gray:       #8888AA;
+      --border:     rgba(255,255,255,0.07);
+      --border-c:   rgba(0,200,255,0.18);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'Inter', system-ui, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .scanline {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,200,255,0.012) 2px, rgba(0,200,255,0.012) 4px
+      );
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(3,3,8,0.94);
+      backdrop-filter: blur(24px);
+    }
+    .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700; letter-spacing: 0.14em; }
+    .logo span { color: var(--cyan); }
+    .header-center { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; letter-spacing: 0.2em; color: var(--gray); text-transform: uppercase; }
+    .reset-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; letter-spacing: 0.1em;
+      color: var(--gray); background: none; border: 1px solid var(--border);
+      padding: 0.28rem 0.8rem; border-radius: 100px; cursor: pointer; transition: color 0.2s, border-color 0.2s;
+    }
+    .reset-btn:hover { color: #ef4444; border-color: rgba(239,68,68,0.35); }
+
+    /* ── MAIN ── */
+    main { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+    /* ── PROGRESS ── */
+    .progress-block { margin-bottom: 3rem; }
+    .prog-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.65rem; }
+    .prog-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; color: var(--cyan); text-transform: uppercase; }
+    .prog-pct {
+      font-family: 'Space Grotesk', sans-serif; font-size: 1.75rem; font-weight: 700; line-height: 1;
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .prog-track { height: 3px; background: var(--border); border-radius: 100px; overflow: hidden; }
+    .prog-fill { height: 100%; background: linear-gradient(90deg, var(--cyan), var(--violet)); border-radius: 100px; transition: width 0.6s cubic-bezier(.4,0,.2,1); }
+    .prog-sub { margin-top: 0.5rem; font-size: 0.78rem; color: var(--gray); }
+
+    /* ── WEEK CARDS ── */
+    .week-card {
+      border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+      margin-bottom: 0.875rem; background: var(--surface);
+      backdrop-filter: blur(12px); transition: border-color 0.35s;
+    }
+    .week-card.is-active { border-color: var(--border-c); }
+    .week-card.is-done   { border-color: rgba(34,197,94,0.22); }
+
+    .week-header {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.15rem 1.5rem; cursor: pointer; user-select: none;
+    }
+    .week-header:hover { background: rgba(0,200,255,0.025); }
+    .wk-num { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; letter-spacing: 0.15em; color: var(--cyan); opacity: 0.55; white-space: nowrap; }
+    .wk-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.975rem; font-weight: 600; color: var(--white); flex: 1; }
+    .wk-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; letter-spacing: 0.08em; padding: 0.22rem 0.7rem; border-radius: 100px; white-space: nowrap; }
+    .badge-pend { background: var(--cyan-dim); color: var(--cyan); border: 1px solid var(--border-c); }
+    .badge-done { background: var(--green-dim); color: var(--green); border: 1px solid rgba(34,197,94,0.28); }
+    .wk-chevron { color: var(--gray); font-size: 0.6rem; transition: transform 0.3s; flex-shrink: 0; }
+    .week-card.is-open .wk-chevron { transform: rotate(180deg); }
+
+    .week-body { display: none; border-top: 1px solid var(--border); }
+    .week-card.is-open .week-body { display: block; }
+    .wk-objective { padding: 0.7rem 1.5rem; font-size: 0.78rem; color: var(--gray); line-height: 1.55; background: rgba(0,0,0,0.18); border-bottom: 1px solid var(--border); }
+    .wk-objective strong { color: var(--cyan); font-weight: 500; }
+
+    /* ── DAY ITEM ── */
+    .day-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1rem 1.5rem; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.18s;
+    }
+    .day-item:last-child { border-bottom: none; }
+    .day-item:hover { background: rgba(0,200,255,0.03); }
+    .day-item.is-done { background: rgba(34,197,94,0.03); }
+
+    .d-check {
+      width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px;
+      border-radius: 6px; border: 1px solid var(--border-c);
+      background: var(--cyan-dim);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+      font-size: 0.65rem; color: transparent;
+    }
+    .day-item.is-done .d-check { background: var(--green-dim); border-color: rgba(34,197,94,0.4); color: var(--green); }
+    .day-item.is-review .d-check { border-color: rgba(139,92,246,0.4); background: var(--violet-dim); }
+    .day-item.is-review.is-done .d-check { background: var(--green-dim); border-color: rgba(34,197,94,0.4); color: var(--green); }
+
+    .d-body { flex: 1; min-width: 0; }
+    .d-day { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.3rem; }
+    .day-item.is-done .d-day { color: var(--green); opacity: 0.65; }
+
+    .d-text { font-size: 0.875rem; line-height: 1.55; color: var(--white); margin-bottom: 0.45rem; }
+    .day-item.is-done .d-text { color: var(--gray); text-decoration: line-through; text-decoration-color: rgba(136,136,170,0.35); }
+
+    /* Outcome sentence */
+    .d-outcome {
+      font-size: 0.78rem; color: var(--cyan); line-height: 1.5;
+      margin-bottom: 0.5rem; opacity: 0.8;
+      padding-left: 0.6rem;
+      border-left: 2px solid var(--border-c);
+    }
+    .day-item.is-review .d-outcome { color: var(--violet); border-left-color: rgba(139,92,246,0.35); }
+    .day-item.is-done .d-outcome { color: var(--gray); opacity: 0.45; }
+
+    .d-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .d-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.54rem; letter-spacing: 0.08em; color: var(--gray); border: 1px solid var(--border); padding: 0.14rem 0.55rem; border-radius: 100px; }
+    .is-review .d-tag { color: var(--violet); border-color: rgba(139,92,246,0.25); }
+
+    .d-platform {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.52rem; letter-spacing: 0.06em;
+      padding: 0.14rem 0.5rem; border-radius: 100px;
+    }
+    .plt-yt  { background: rgba(255,0,0,0.10); color: #ff6b6b; border: 1px solid rgba(255,0,0,0.2); }
+    .plt-dl  { background: var(--cyan-dim); color: var(--cyan); border: 1px solid var(--border-c); }
+
+    .d-link {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.54rem; letter-spacing: 0.08em;
+      color: var(--white); border: 1px solid var(--border);
+      padding: 0.18rem 0.65rem; border-radius: 100px;
+      text-decoration: none; transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .d-link:hover { background: var(--cyan-dim); border-color: var(--border-c); color: var(--cyan); }
+
+    /* ── RULES ── */
+    .rules-block { margin-top: 2rem; border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; background: var(--surface); }
+    .rules-lbl { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; letter-spacing: 0.2em; color: var(--cyan); text-transform: uppercase; margin-bottom: 0.85rem; }
+    .rule { font-size: 0.8rem; color: var(--gray); line-height: 1.7; }
+    .rule.ok::before { content: '✓  '; color: var(--green); }
+    .rule.no::before { content: '✗  '; color: #ef4444; }
+
+    .foot-note { margin-top: 2.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; letter-spacing: 0.14em; color: rgba(136,136,170,0.4); text-align: center; text-transform: uppercase; }
+
+    @media (max-width: 600px) {
+      header { padding: 0.9rem 1rem; }
+      .header-center { display: none; }
+      main { padding: 2rem 1rem 5rem; }
+      .week-header { padding: 1rem; }
+      .day-item { padding: 0.875rem 1rem; }
+      .wk-objective { padding: 0.7rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="scanline"></div>
+
+<header>
+  <div class="logo">ZEITH<span>.</span>CO</div>
+  <div class="header-center">Plano de Estudos · AI Agêntica · 2h/dia</div>
+  <button class="reset-btn" onclick="resetProgress()">↺ Resetar</button>
+</header>
+
+<main>
+  <div class="progress-block">
+    <div class="prog-top">
+      <div class="prog-label">Progresso Geral</div>
+      <div class="prog-pct" id="js-pct">0%</div>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="js-bar" style="width:0%"></div></div>
+    <div class="prog-sub" id="js-sub">0 de 20 sessões concluídas · 4 semanas · 2h/dia</div>
+  </div>
+
+  <div id="js-weeks"></div>
+
+  <div class="rules-block">
+    <div class="rules-lbl">Regras do Plano</div>
+    <div class="rule ok">Não pula a sexta-feira — a revisão vale mais que mais um vídeo</div>
+    <div class="rule ok">Pausa o conteúdo sempre que surgir dúvida — anota antes de continuar</div>
+    <div class="rule ok">DeepLearning.AI exige cadastro gratuito — faça antes de começar</div>
+    <div class="rule ok">70% de compreensão é suficiente para operar no nível CEO</div>
+    <div class="rule no">Não consome mais de 2h por dia — retenção cai muito acima disso</div>
+  </div>
+
+  <div class="foot-note">Progresso salvo localmente no navegador · ZEITH.CO</div>
+</main>
+
+<script>
+const PLAN = [
+  {
+    num:'01', title:'Base Conceitual',
+    objective:'Entender o que é IA agêntica e como pensa um sistema autônomo',
+    days:[
+      {
+        day:'Segunda',
+        text:'Conversations with Andrew Ng — vídeos 1, 2 e 3',
+        outcome:'Você desenvolverá um modelo mental sobre como os maiores nomes da IA pensam e tomam decisões estratégicas.',
+        tag:'YouTube · DeepLearning.AI',
+        platform:'yt',
+        url:'https://www.youtube.com/results?search_query=Conversations+with+Andrew+Ng+deeplearningai'
+      },
+      {
+        day:'Terça',
+        text:'Conversations with Andrew Ng — vídeos 4, 5 e 6',
+        outcome:'Você vai expandir sua visão sobre onde estão as principais apostas da indústria e o que os líderes de AI realmente constroem.',
+        tag:'YouTube · DeepLearning.AI',
+        platform:'yt',
+        url:'https://www.youtube.com/results?search_query=Conversations+with+Andrew+Ng+deeplearningai'
+      },
+      {
+        day:'Quarta',
+        text:'Curso: Agentic AI com Andrew Ng — módulo "What are AI Agents" e introdução',
+        outcome:'Você vai compreender exatamente o que é um agente de IA e por que sistemas agênticos são fundamentalmente diferentes de simples chatbots.',
+        tag:'DeepLearning.AI',
+        platform:'dl',
+        url:'https://www.deeplearning.ai/courses/agentic-ai/'
+      },
+      {
+        day:'Quinta',
+        text:'Curso: Agentic AI — módulo "Agentic Design Patterns": Reflection, Tool Use, Planning, Multi-Agent',
+        outcome:'Você dominará os 4 padrões que estruturam toda arquitetura agêntica — e reconhecerá cada um nas camadas da Zeith.',
+        tag:'DeepLearning.AI',
+        platform:'dl',
+        url:'https://learn.deeplearning.ai/courses/agentic-ai/lesson/rm9bg7/agentic-design-patterns'
+      },
+      {
+        day:'Sexta · Revisão',
+        text:'Escreve com suas palavras: como cada um dos 4 padrões aparece nas 5 camadas da Zeith',
+        outcome:'Você vai consolidar a semana transformando conceitos abstratos em mapeamento concreto da sua própria operação.',
+        tag:'Revisão', platform:null, url:null, review:true
+      }
+    ]
+  },
+  {
+    num:'02', title:'Sistemas Multi-Agente',
+    objective:'Entender como agentes se coordenam — o coração da arquitetura Zeith',
+    days:[
+      {
+        day:'Segunda',
+        text:'Curso: Multi AI Agent Systems com CrewAI — como montar equipes de agentes com papéis definidos',
+        outcome:'Você entenderá como múltiplos agentes delegam e colaboram em hierarquia — a lógica exata dos Diretores Agênticos da Zeith.',
+        tag:'DeepLearning.AI',
+        platform:'dl',
+        url:'https://www.deeplearning.ai/short-courses/multi-ai-agent-systems-with-crewai/'
+      },
+      {
+        day:'Terça',
+        text:'Curso: AI Agents in LangGraph — fluxos agênticos com controle de estado e memória',
+        outcome:'Você aprenderá como construir operações longas e complexas onde o agente mantém contexto e ajusta o rumo — base do CV-CEO.',
+        tag:'DeepLearning.AI',
+        platform:'dl',
+        url:'https://www.deeplearning.ai/short-courses/ai-agents-in-langgraph/'
+      },
+      {
+        day:'Quarta',
+        text:'Curso: MCP com Anthropic — como agentes se conectam a ferramentas, APIs e dados externos via protocolo padrão',
+        outcome:'Você vai entender como a Zeith pode conectar seus agentes a qualquer sistema externo com um protocolo universal e sem código customizado.',
+        tag:'DeepLearning.AI',
+        platform:'dl',
+        url:'https://www.deeplearning.ai/short-courses/mcp-build-rich-context-ai-apps-with-anthropic/'
+      },
+      {
+        day:'Quinta',
+        text:'Curso: AI Agentic Design Patterns com AutoGen — sistemas autônomos de decisão em cadeia',
+        outcome:'Você compreenderá como agentes tomam decisões sequenciais sem intervenção humana — o que torna a operação 95% autônoma possível.',
+        tag:'DeepLearning.AI',
+        platform:'dl',
+        url:'https://www.deeplearning.ai/short-courses/ai-agentic-design-patterns-with-autogen/'
+      },
+      {
+        day:'Sexta · Revisão',
+        text:'Mapeia no papel: qual camada da Zeith (01 a 05) usa qual padrão aprendido esta semana',
+        outcome:'Você construirá o mapa técnico completo da Zeith — conectando cada camada de governança a um mecanismo agêntico real.',
+        tag:'Revisão', platform:null, url:null, review:true
+      }
+    ]
+  },
+  {
+    num:'03', title:'Visão de Indústria',
+    objective:'Entender onde o mercado está agora e para onde vai nos próximos 12 meses',
+    days:[
+      {
+        day:'Segunda',
+        text:'AI Dev 25 — sessões de keynote de abertura: Andrew Ng sobre o estado atual da IA em 2025',
+        outcome:'Você desenvolverá um panorama realista de onde a indústria está e quais são as apostas reais dos maiores laboratórios e empresas.',
+        tag:'YouTube · AI Dev 25',
+        platform:'yt',
+        url:'https://www.youtube.com/results?search_query=AI+Dev+25+deeplearning.ai+keynote+andrew+ng+2025'
+      },
+      {
+        day:'Terça',
+        text:'AI Dev 25 — sessões sobre autonomia, agentes em produção e futuro do trabalho',
+        outcome:'Você entenderá como líderes de grandes empresas estão realmente implementando autonomia de IA — além do hype.',
+        tag:'YouTube · AI Dev 25',
+        platform:'yt',
+        url:'https://www.youtube.com/results?search_query=AI+Dev+25+deeplearning.ai+autonomous+agents+production'
+      },
+      {
+        day:'Quarta',
+        text:'AI Dev 25 — sessões sobre multi-agent, orquestração e infraestrutura de IA',
+        outcome:'Você vai calibrar a arquitetura da Zeith em relação ao que as melhores equipes do mundo estão construindo em produção.',
+        tag:'YouTube · AI Dev 25',
+        platform:'yt',
+        url:'https://www.youtube.com/results?search_query=AI+Dev+25+deeplearning.ai+multi+agent+orchestration+infrastructure'
+      },
+      {
+        day:'Quinta',
+        text:'AI Dev 25 — sessões com Google, AWS, LangChain, CrewAI: cases reais e lições aprendidas',
+        outcome:'Você identificará oportunidades e riscos específicos para a Zeith com base nos erros e acertos de quem já está em produção.',
+        tag:'YouTube · AI Dev 25',
+        platform:'yt',
+        url:'https://www.youtube.com/results?search_query=AI+Dev+25+deeplearning.ai+google+aws+langchain+crewai+sessions'
+      },
+      {
+        day:'Sexta · Revisão',
+        text:'Lista: quais tendências da semana afetam diretamente a operação e o posicionamento da Zeith nos próximos 12 meses',
+        outcome:'Você vai criar seu próprio mapa de inteligência de mercado — a visão que um CEO precisa para decidir com antecedência.',
+        tag:'Revisão', platform:null, url:null, review:true
+      }
+    ]
+  },
+  {
+    num:'04', title:'Síntese e Aplicação',
+    objective:'Transformar conhecimento em visão estratégica real para a Zeith',
+    days:[
+      {
+        day:'Segunda',
+        text:'Relê todas as anotações das 3 semanas anteriores — identifica os 5 conceitos que mais te impactaram',
+        outcome:'Você transformará notas soltas em uma visão estruturada, distinguindo o que é fundamental do que é detalhe técnico.',
+        tag:'Revisão', platform:null, url:null, review:true
+      },
+      {
+        day:'Terça',
+        text:'Escreve: "O que mudaria na arquitetura da Zeith com o que aprendi nessas 3 semanas?"',
+        outcome:'Você articulará sua primeira decisão estratégica informada por conhecimento técnico real — teoria virou direção.',
+        tag:'Aplicação', platform:null, url:null, review:true
+      },
+      {
+        day:'Quarta',
+        text:'Aprofunda os 2–3 tópicos que ficaram com mais dúvidas — busca vídeos específicos no DeepLearning.AI',
+        outcome:'Você fechará as lacunas de compreensão que ficaram abertas, solidificando os pontos de maior incerteza.',
+        tag:'DeepLearning.AI',
+        platform:'dl',
+        url:'https://www.deeplearning.ai/courses/'
+      },
+      {
+        day:'Quinta',
+        text:'Reassiste 1 vídeo de cada semana — o que fez mais sentido para você na época',
+        outcome:'Você consolidará os insights com uma visão madura: o que era abstrato na primeira vez agora terá significado concreto.',
+        tag:'Revisão', platform:null, url:null, review:true
+      },
+      {
+        day:'Sexta · Síntese Final',
+        text:'Redige 1 parágrafo descrevendo a Zeith com o vocabulário técnico que você agora domina',
+        outcome:'Você vai sair com fluência real no tema — capaz de liderar, questionar e expandir a arquitetura da Zeith com autoridade.',
+        tag:'Conclusão', platform:null, url:null, review:true
+      }
+    ]
+  }
+];
+
+const TOTAL = PLAN.reduce((a,w) => a + w.days.length, 0);
+
+function getState()   { try { return JSON.parse(localStorage.getItem('zeith_study')||'{}'); } catch { return {}; } }
+function saveState(s) { localStorage.setItem('zeith_study', JSON.stringify(s)); }
+function key(w,d)     { return `w${w}_d${d}`; }
+
+let openSet = new Set();
+
+function firstIncomplete() {
+  const s = getState();
+  for (let wi=0; wi<PLAN.length; wi++) {
+    if (PLAN[wi].days.some((_,di) => !s[key(wi,di)])) return wi;
+  }
+  return 0;
+}
+
+function platformBadge(p) {
+  if (p==='yt') return `<span class="d-platform plt-yt">▶ YouTube</span>`;
+  if (p==='dl') return `<span class="d-platform plt-dl">◈ DeepLearning.AI</span>`;
+  return '';
+}
+
+function render() {
+  const s = getState();
+  const cont = document.getElementById('js-weeks');
+  cont.innerHTML = '';
+
+  PLAN.forEach((week, wi) => {
+    const done    = week.days.filter((_,di) => s[key(wi,di)]).length;
+    const allDone = done === week.days.length;
+    const isOpen  = openSet.has(wi);
+
+    const card = document.createElement('div');
+    card.className = ['week-card', allDone?'is-done':'is-active', isOpen?'is-open':''].join(' ');
+
+    card.innerHTML = `
+      <div class="week-header" data-wi="${wi}">
+        <div class="wk-num">SEMANA ${week.num}</div>
+        <div class="wk-title">${week.title}</div>
+        <div class="wk-badge ${allDone?'badge-done':'badge-pend'}">${done}/${week.days.length}${allDone?' · COMPLETO':''}</div>
+        <div class="wk-chevron">▼</div>
+      </div>
+      <div class="week-body">
+        <div class="wk-objective"><strong>Objetivo:</strong> ${week.objective}</div>
+        ${week.days.map((day,di) => {
+          const checked = !!s[key(wi,di)];
+          return `
+            <div class="day-item${checked?' is-done':''}${day.review?' is-review':''}" data-wi="${wi}" data-di="${di}">
+              <div class="d-check">${checked?'✓':''}</div>
+              <div class="d-body">
+                <div class="d-day">${day.day}</div>
+                <div class="d-text">${day.text}</div>
+                <div class="d-outcome">→ ${day.outcome}</div>
+                <div class="d-meta">
+                  <span class="d-tag">${day.tag}</span>
+                  ${platformBadge(day.platform)}
+                  ${day.url ? `<a class="d-link" href="${day.url}" target="_blank">↗ Abrir</a>` : ''}
+                </div>
+              </div>
+            </div>`;
+        }).join('')}
+      </div>`;
+
+    cont.appendChild(card);
+  });
+
+  const totalDone = PLAN.reduce((a,w,wi) => a + w.days.filter((_,di)=>s[key(wi,di)]).length, 0);
+  const pct = Math.round((totalDone/TOTAL)*100);
+  document.getElementById('js-pct').textContent = pct+'%';
+  document.getElementById('js-bar').style.width  = pct+'%';
+  document.getElementById('js-sub').textContent  = `${totalDone} de ${TOTAL} sessões concluídas · 4 semanas · 2h/dia`;
+}
+
+document.getElementById('js-weeks').addEventListener('click', e => {
+  const header = e.target.closest('.week-header');
+  if (header) { const wi=+header.dataset.wi; openSet.has(wi)?openSet.delete(wi):openSet.add(wi); render(); return; }
+  const item = e.target.closest('.day-item');
+  if (item && !e.target.closest('.d-link')) {
+    const wi=+item.dataset.wi, di=+item.dataset.di;
+    const s=getState(); s[key(wi,di)]=!s[key(wi,di)]; saveState(s); render();
+  }
+});
+
+function resetProgress() {
+  if (confirm('Resetar todo o progresso?')) {
+    localStorage.removeItem('zeith_study');
+    openSet = new Set([firstIncomplete()]);
+    render();
+  }
+}
+
+openSet.add(firstIncomplete());
+render();
+</script>
+</body>
+</html>

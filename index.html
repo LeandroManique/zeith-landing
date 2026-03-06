@@ -712,6 +712,96 @@
     @media (max-width: 420px) {
       .clock-time { font-size: 1.08rem; }
     }
+
+    /* ── COGNITIVE TRACK ── */
+    .nav-ct-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.1em; font-weight: 600;
+      color: var(--bg); background: var(--cyan);
+      border: none; padding: 0.32rem 0.9rem; border-radius: 100px;
+      cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: opacity 0.2s, box-shadow 0.2s;
+    }
+    .nav-ct-btn:hover { opacity: 0.85; box-shadow: 0 0 20px rgba(0,200,255,0.45); }
+
+    #cognitive-track { background: var(--bg2); }
+
+    .ct-weeks {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 1rem; margin-top: 4rem;
+    }
+    .ct-week {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem 1.25rem;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .ct-week:hover { border-color: var(--border-c); transform: translateY(-3px); }
+    .ct-wk-num   { font-family:'JetBrains Mono',monospace; font-size:.54rem; letter-spacing:.15em; color:var(--cyan); opacity:.55; margin-bottom:.5rem; }
+    .ct-wk-title { font-size:.9rem; font-weight:600; color:var(--white); margin-bottom:.4rem; }
+    .ct-wk-desc  { font-size:.78rem; color:var(--gray); line-height:1.55; }
+
+    .ct-disclaimer {
+      margin-top: 2rem;
+      font-family:'JetBrains Mono',monospace; font-size:.58rem; letter-spacing:.1em;
+      color: var(--gray); opacity:.55;
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .ct-disclaimer::before { content:'◈'; color:var(--cyan); opacity:.7; }
+
+    .ct-form-wrap {
+      margin-top: 3rem;
+      background: var(--surface); border: 1px solid var(--border-c);
+      border-radius: 20px; padding: 2.5rem;
+      backdrop-filter: blur(12px);
+    }
+    .ct-form-title { font-family:'Space Grotesk',sans-serif; font-size:1.1rem; font-weight:600; margin-bottom:.4rem; }
+    .ct-form-sub   { font-size:.82rem; color:var(--gray); margin-bottom:2rem; }
+
+    .ct-fields { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; }
+    .ct-field  { display:flex; flex-direction:column; gap:.35rem; }
+    .ct-field label {
+      font-family:'JetBrains Mono',monospace; font-size:.55rem;
+      letter-spacing:.14em; text-transform:uppercase; color:var(--gray);
+    }
+    .ct-field input {
+      background:rgba(0,0,0,0.3); border:1px solid var(--border); border-radius:8px;
+      color:var(--white); font-family:'Inter',sans-serif; font-size:.875rem;
+      padding:.65rem .85rem; outline:none;
+      transition:border-color .2s, box-shadow .2s;
+    }
+    .ct-field input::placeholder { color:rgba(136,136,170,0.4); }
+    .ct-field input:focus { border-color:var(--border-c); box-shadow:0 0 0 3px rgba(0,200,255,0.07); }
+
+    .ct-consent {
+      margin-top:1.25rem; display:flex; align-items:flex-start; gap:.65rem;
+      font-size:.75rem; color:var(--gray); line-height:1.55; cursor:pointer;
+    }
+    .ct-consent input[type=checkbox] { width:16px; height:16px; flex-shrink:0; margin-top:2px; accent-color:var(--cyan); cursor:pointer; }
+
+    .ct-submit {
+      margin-top:1.75rem; width:100%;
+      font-family:'Space Grotesk',sans-serif; font-size:1rem; font-weight:600; letter-spacing:.03em;
+      color:var(--bg); background:var(--cyan); border:none; border-radius:100px;
+      padding:.9rem 2rem; cursor:pointer;
+      transition:opacity .2s, box-shadow .2s, transform .2s;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .ct-submit:hover { opacity:.88; box-shadow:0 0 32px rgba(0,200,255,0.45); transform:translateY(-2px); }
+    .ct-submit:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+    #ct-success { text-align:center; padding:3rem 1rem; }
+    .ct-success-icon  { font-size:2.5rem; color:var(--cyan); margin-bottom:1rem; }
+    .ct-success-title { font-family:'Space Grotesk',sans-serif; font-size:1.4rem; font-weight:700; margin-bottom:.5rem; }
+    .ct-success-sub   { font-size:.875rem; color:var(--gray); }
+
+    @media (max-width:768px) {
+      .ct-weeks  { grid-template-columns:repeat(2,1fr); }
+      .ct-fields { grid-template-columns:1fr; }
+      .ct-form-wrap { padding:1.5rem; }
+    }
+    @media (max-width:480px) {
+      .ct-weeks { grid-template-columns:1fr; }
+    }
   </style>
 </head>
 <body>
@@ -736,6 +826,7 @@
       <span class="lang-sep">/</span>
       <button class="lang-btn" data-lang="es">ES</button>
     </div>
+    <a href="#cognitive-track" class="nav-ct-btn" data-i18n="nav_ct">Cognitive Track</a>
     <div class="nav-pill mono">AI-FIRST</div>
   </div>
 </nav>
@@ -975,6 +1066,93 @@
   </div>
 </section>
 
+<!-- COGNITIVE TRACK -->
+<section id="cognitive-track">
+  <div class="s-inner">
+    <div class="s-label reveal" data-i18n="ct_lbl">04 · Cognitive Track</div>
+    <h2 class="s-title reveal d1" data-i18n-html="ct_ttl">Do zero à visão estratégica<br>em AI agêntica.</h2>
+    <p class="s-desc reveal d2" data-i18n="ct_sub">4 semanas · 2h/dia · Curadoria Zeith Co · Acesso gratuito.</p>
+
+    <div class="ct-weeks">
+      <div class="ct-week reveal d1">
+        <div class="ct-wk-num">SEMANA 01</div>
+        <div class="ct-wk-title" data-i18n="ct_w1t">Base Conceitual</div>
+        <div class="ct-wk-desc"  data-i18n="ct_w1d">O que é IA agêntica e como pensa um sistema autônomo.</div>
+      </div>
+      <div class="ct-week reveal d2">
+        <div class="ct-wk-num">SEMANA 02</div>
+        <div class="ct-wk-title" data-i18n="ct_w2t">Sistemas Multi-Agente</div>
+        <div class="ct-wk-desc"  data-i18n="ct_w2d">Como agentes se coordenam em hierarquia e tomam decisões.</div>
+      </div>
+      <div class="ct-week reveal d3">
+        <div class="ct-wk-num">SEMANA 03</div>
+        <div class="ct-wk-title" data-i18n="ct_w3t">Visão de Indústria</div>
+        <div class="ct-wk-desc"  data-i18n="ct_w3d">Onde o mercado está agora e para onde vai nos próximos 12 meses.</div>
+      </div>
+      <div class="ct-week reveal d4">
+        <div class="ct-wk-num">SEMANA 04</div>
+        <div class="ct-wk-title" data-i18n="ct_w4t">Síntese e Aplicação</div>
+        <div class="ct-wk-desc"  data-i18n="ct_w4d">Transformar conhecimento em visão estratégica real.</div>
+      </div>
+    </div>
+
+    <div class="ct-disclaimer reveal" data-i18n="ct_disclaimer">Curadoria Zeith Co · Conteúdo de DeepLearning.AI e YouTube · Sem fins lucrativos</div>
+
+    <div class="ct-form-wrap reveal">
+      <form id="ct-form">
+        <div class="ct-form-title" data-i18n="ct_form_title">Acesse gratuitamente</div>
+        <div class="ct-form-sub"   data-i18n="ct_form_sub">Preencha para receber acesso imediato ao plano completo.</div>
+        <div class="ct-fields">
+          <div class="ct-field">
+            <label data-i18n="ct_f_nome">Nome</label>
+            <input type="text"  name="nome"     required data-ph="ct_ph_nome"     placeholder="Seu nome completo">
+          </div>
+          <div class="ct-field">
+            <label data-i18n="ct_f_cargo">Cargo</label>
+            <input type="text"  name="cargo"    required data-ph="ct_ph_cargo"    placeholder="Seu cargo atual">
+          </div>
+          <div class="ct-field">
+            <label data-i18n="ct_f_empresa">Empresa</label>
+            <input type="text"  name="empresa"           data-ph="ct_ph_empresa"  placeholder="Nome da empresa">
+          </div>
+          <div class="ct-field">
+            <label data-i18n="ct_f_segmento">Segmento</label>
+            <input type="text"  name="segmento"          data-ph="ct_ph_segmento" placeholder="Ex: Varejo, Saúde, Tech">
+          </div>
+          <div class="ct-field">
+            <label data-i18n="ct_f_cidade">Cidade</label>
+            <input type="text"  name="cidade"   required data-ph="ct_ph_cidade"   placeholder="Sua cidade">
+          </div>
+          <div class="ct-field">
+            <label data-i18n="ct_f_pais">País</label>
+            <input type="text"  name="pais"     required data-ph="ct_ph_pais"     placeholder="Seu país">
+          </div>
+          <div class="ct-field">
+            <label data-i18n="ct_f_email">E-mail</label>
+            <input type="email" name="email"    required data-ph="ct_ph_email"    placeholder="seu@email.com">
+          </div>
+          <div class="ct-field">
+            <label data-i18n="ct_f_celular">Celular</label>
+            <input type="tel"   name="celular"            data-ph="ct_ph_celular"  placeholder="+55 11 99999-9999">
+          </div>
+        </div>
+        <label class="ct-consent">
+          <input type="checkbox" id="ct-consent" required>
+          <span data-i18n="ct_consent">Concordo com o uso dos meus dados pela Zeith Co para envio de conteúdos relevantes. Nenhum dado será vendido a terceiros.</span>
+        </label>
+        <button type="submit" class="ct-submit" id="ct-submit">
+          <span data-i18n="ct_btn">Acessar Cognitive Track →</span>
+        </button>
+      </form>
+      <div id="ct-success" style="display:none">
+        <div class="ct-success-icon">◈</div>
+        <div class="ct-success-title" data-i18n="ct_ok_title">Acesso liberado.</div>
+        <div class="ct-success-sub"   data-i18n="ct_ok_sub">Redirecionando para o Cognitive Track...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- WORLD CLOCKS -->
 <div class="clocks-band">
   <div class="clocks-grid">
@@ -1058,6 +1236,28 @@ const I18N = {
     mtag1:'AI-FIRST', mtag2:'ADAPTIVO', mtag3:'ANTIFRÁGIL', mtag4:'ORIENTADO A DADOS', mtag5:'RETORNOS ASSIMÉTRICOS', mtag6:'ZERO RUÍDO',
     f_sys:'SYS:CAPITAL_COGNITIVO_v1.0 · GLOBAL', f_tag:'Organização AI-First · Operações Autônomas',
     f_contact:'Contato: <a href="tel:+5551998591966">+55 51 99859-1966</a>',
+    nav_ct:'Cognitive Track',
+    ct_lbl:'04 · Cognitive Track',
+    ct_ttl:'Do zero à visão estratégica<br>em AI agêntica.',
+    ct_sub:'4 semanas · 2h/dia · Curadoria Zeith Co · Acesso gratuito.',
+    ct_w1t:'Base Conceitual',      ct_w1d:'O que é IA agêntica e como pensa um sistema autônomo.',
+    ct_w2t:'Sistemas Multi-Agente',ct_w2d:'Como agentes se coordenam em hierarquia e tomam decisões.',
+    ct_w3t:'Visão de Indústria',   ct_w3d:'Onde o mercado está agora e para onde vai nos próximos 12 meses.',
+    ct_w4t:'Síntese e Aplicação',  ct_w4d:'Transformar conhecimento em visão estratégica real.',
+    ct_disclaimer:'Curadoria Zeith Co · Conteúdo de DeepLearning.AI e YouTube · Sem fins lucrativos',
+    ct_form_title:'Acesse gratuitamente',
+    ct_form_sub:'Preencha para receber acesso imediato ao plano completo.',
+    ct_f_nome:'Nome',      ct_ph_nome:'Seu nome completo',
+    ct_f_cargo:'Cargo',    ct_ph_cargo:'Seu cargo atual',
+    ct_f_empresa:'Empresa',ct_ph_empresa:'Nome da empresa',
+    ct_f_segmento:'Segmento', ct_ph_segmento:'Ex: Varejo, Saúde, Tech',
+    ct_f_cidade:'Cidade',  ct_ph_cidade:'Sua cidade',
+    ct_f_pais:'País',      ct_ph_pais:'Seu país',
+    ct_f_email:'E-mail',   ct_ph_email:'seu@email.com',
+    ct_f_celular:'Celular',ct_ph_celular:'+55 11 99999-9999',
+    ct_consent:'Concordo com o uso dos meus dados pela Zeith Co para envio de conteúdos relevantes. Nenhum dado será vendido a terceiros.',
+    ct_btn:'Acessar Cognitive Track →',
+    ct_ok_title:'Acesso liberado.', ct_ok_sub:'Redirecionando para o Cognitive Track...',
   },
   en: {
     nav_system:'System', nav_arch:'Architecture', nav_cycle:'Cycle', nav_metrics:'Metrics',
@@ -1105,6 +1305,28 @@ const I18N = {
     mtag1:'AI-FIRST', mtag2:'ADAPTIVE', mtag3:'ANTIFRAGILE', mtag4:'DATA-DRIVEN', mtag5:'ASYMMETRIC RETURNS', mtag6:'ZERO NOISE',
     f_sys:'SYS:COGNITIVE_CAPITAL_v1.0 · GLOBAL', f_tag:'AI-First Organization · Autonomous Operations',
     f_contact:'Contact: <a href="tel:+5551998591966">+55 51 99859-1966</a>',
+    nav_ct:'Cognitive Track',
+    ct_lbl:'04 · Cognitive Track',
+    ct_ttl:'From zero to strategic vision<br>in agentic AI.',
+    ct_sub:'4 weeks · 2h/day · Zeith Co Curation · Free access.',
+    ct_w1t:'Conceptual Foundation', ct_w1d:'What is agentic AI and how does an autonomous system think.',
+    ct_w2t:'Multi-Agent Systems',   ct_w2d:'How agents coordinate in hierarchy and make decisions.',
+    ct_w3t:'Industry Vision',       ct_w3d:'Where the market stands today and where it goes in the next 12 months.',
+    ct_w4t:'Synthesis & Application',ct_w4d:'Turn knowledge into real strategic vision.',
+    ct_disclaimer:'Zeith Co Curation · Content by DeepLearning.AI and YouTube · Non-commercial',
+    ct_form_title:'Access for free',
+    ct_form_sub:'Fill in to receive immediate access to the full plan.',
+    ct_f_nome:'Name',      ct_ph_nome:'Your full name',
+    ct_f_cargo:'Role',     ct_ph_cargo:'Your current role',
+    ct_f_empresa:'Company',ct_ph_empresa:'Company name',
+    ct_f_segmento:'Industry',ct_ph_segmento:'e.g. Retail, Health, Tech',
+    ct_f_cidade:'City',    ct_ph_cidade:'Your city',
+    ct_f_pais:'Country',   ct_ph_pais:'Your country',
+    ct_f_email:'E-mail',   ct_ph_email:'your@email.com',
+    ct_f_celular:'Mobile', ct_ph_celular:'+1 555 000-0000',
+    ct_consent:'I agree to the use of my data by Zeith Co for sending relevant content. No data will be sold to third parties.',
+    ct_btn:'Access Cognitive Track →',
+    ct_ok_title:'Access granted.', ct_ok_sub:'Redirecting to Cognitive Track...',
   },
   es: {
     nav_system:'Sistema', nav_arch:'Arquitectura', nav_cycle:'Ciclo', nav_metrics:'Métricas',
@@ -1152,6 +1374,28 @@ const I18N = {
     mtag1:'AI-FIRST', mtag2:'ADAPTATIVO', mtag3:'ANTIFRÁGIL', mtag4:'BASADO EN DATOS', mtag5:'RETORNOS ASIMÉTRICOS', mtag6:'CERO RUIDO',
     f_sys:'SYS:CAPITAL_COGNITIVO_v1.0 · GLOBAL', f_tag:'Organización AI-First · Operaciones Autónomas',
     f_contact:'Contacto: <a href="tel:+5551998591966">+55 51 99859-1966</a>',
+    nav_ct:'Cognitive Track',
+    ct_lbl:'04 · Cognitive Track',
+    ct_ttl:'De cero a visión estratégica<br>en AI agéntica.',
+    ct_sub:'4 semanas · 2h/día · Curación Zeith Co · Acceso gratuito.',
+    ct_w1t:'Base Conceptual',       ct_w1d:'Qué es la IA agéntica y cómo piensa un sistema autónomo.',
+    ct_w2t:'Sistemas Multi-Agente', ct_w2d:'Cómo los agentes se coordinan en jerarquía y toman decisiones.',
+    ct_w3t:'Visión de Industria',   ct_w3d:'Dónde está el mercado hoy y hacia dónde va en los próximos 12 meses.',
+    ct_w4t:'Síntesis y Aplicación', ct_w4d:'Transformar el conocimiento en visión estratégica real.',
+    ct_disclaimer:'Curación Zeith Co · Contenido de DeepLearning.AI y YouTube · Sin fines de lucro',
+    ct_form_title:'Accede gratuitamente',
+    ct_form_sub:'Completa para recibir acceso inmediato al plan completo.',
+    ct_f_nome:'Nombre',    ct_ph_nome:'Tu nombre completo',
+    ct_f_cargo:'Cargo',    ct_ph_cargo:'Tu cargo actual',
+    ct_f_empresa:'Empresa',ct_ph_empresa:'Nombre de la empresa',
+    ct_f_segmento:'Segmento',ct_ph_segmento:'Ej: Retail, Salud, Tech',
+    ct_f_cidade:'Ciudad',  ct_ph_cidade:'Tu ciudad',
+    ct_f_pais:'País',      ct_ph_pais:'Tu país',
+    ct_f_email:'E-mail',   ct_ph_email:'tu@email.com',
+    ct_f_celular:'Celular',ct_ph_celular:'+54 11 9999-9999',
+    ct_consent:'Acepto el uso de mis datos por Zeith Co para el envío de contenido relevante. Ningún dato será vendido a terceros.',
+    ct_btn:'Acceder al Cognitive Track →',
+    ct_ok_title:'Acceso liberado.', ct_ok_sub:'Redirigiendo al Cognitive Track...',
   }
 };
 
@@ -1176,6 +1420,11 @@ function setLanguage(lang) {
   document.querySelectorAll('[data-i18n-html]').forEach(el => {
     const v = t[el.dataset.i18nHtml];
     if (v !== undefined) el.innerHTML = v;
+  });
+
+  document.querySelectorAll('[data-ph]').forEach(el => {
+    const v = t[el.dataset.ph];
+    if (v !== undefined) el.placeholder = v;
   });
 
   document.querySelectorAll('.lang-btn').forEach(b =>
@@ -1329,6 +1578,46 @@ document.querySelectorAll('a[href^="#"]').forEach(a =>
     if (t) t.scrollIntoView({ behavior:'smooth', block:'start' });
   })
 );
+
+/* ─── COGNITIVE TRACK FORM ───────────────────────── */
+(function () {
+  const ENDPOINT = 'https://script.google.com/macros/s/AKfycbwg1x-t6CoNjIC9yxq6Fe21ZXkRwCrBG_3h_OxkUxXGZKPYyoqXOD3e4E5reY6ssPM2wA/exec';
+  const form    = document.getElementById('ct-form');
+  const btn     = document.getElementById('ct-submit');
+  const success = document.getElementById('ct-success');
+
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    btn.disabled = true;
+
+    const data = {
+      nome:     form.nome.value.trim(),
+      cargo:    form.cargo.value.trim(),
+      empresa:  form.empresa.value.trim(),
+      segmento: form.segmento.value.trim(),
+      cidade:   form.cidade.value.trim(),
+      pais:     form.pais.value.trim(),
+      email:    form.email.value.trim(),
+      celular:  form.celular.value.trim(),
+      idioma:   currentLang,
+    };
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      mode:   'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body:   JSON.stringify(data)
+    })
+    .catch(() => {})
+    .finally(() => {
+      form.style.display    = 'none';
+      success.style.display = 'block';
+      setTimeout(() => { window.location.href = 'study-plan.html'; }, 2200);
+    });
+  });
+})();
 
 /* ─── WORLD CLOCKS ───────────────────────────────── */
 (function () {
